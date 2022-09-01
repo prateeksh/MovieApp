@@ -239,7 +239,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
         binding!!.geners.text = getGenresText(genres)
 
         ratings.rating = convertRatings(details.voteAverage!!)
-        description.text= details.overview
+        description.text = details.overview
 
         Picasso
             .get()

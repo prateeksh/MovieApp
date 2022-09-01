@@ -6,7 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="5dp"
-    android:background="@color/white">
+    app:background="@color/primary_color"
+    app:cardBackgroundColor="@color/primary_color">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -29,8 +30,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine|textImeMultiLine"
-            android:minHeight="48dp"
+            android:ellipsize="end"
             android:text="TextView"
+            android:maxEms="16"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@+id/logo"
@@ -63,10 +65,10 @@
             android:layout_marginTop="8dp"
             android:ellipsize="end"
             android:inputType="textMultiLine|textImeMultiLine"
-            android:maxEms="8"
-            android:maxLines="4"
+            android:maxEms="16"
+            android:maxLines="3"
             android:minHeight="48dp"
-            android:text="TextView"
+            android:text="In a time when monsters walk the Earth, humanity’s fight for its future sets Godzilla and Kong on a collision course that will see the two most powerful forces of nature on the planet collide in a spectacular battle for the ages."
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/imageView2"
