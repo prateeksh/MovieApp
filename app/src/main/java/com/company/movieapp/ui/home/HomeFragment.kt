@@ -22,9 +22,12 @@ import com.company.movieapp.model.*
 import com.company.movieapp.ui.details.DetailBottomSheet
 import com.company.movieapp.utils.DataPassing
 import com.company.movieapp.utils.NetworkUtils
+import com.company.movieapp.utils.hide
+import com.company.movieapp.utils.show
 import javax.inject.Inject
 
 private const val TAG = "HomeFragment"
+
 class HomeFragment : Fragment(), DataPassing {
 
     private var _binding: FragmentHomeBinding? = null
@@ -63,53 +66,52 @@ class HomeFragment : Fragment(), DataPassing {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL,false)
+        binding.containerHome.visibility = View.GONE
+        binding.loader.root.show()
 
-        /*childAdapter = ChildAdapter()
-        recyclerView.adapter = childAdapter*/
+        recyclerView.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL, false
+        )
+
         recyclerView.setHasFixedSize(true)
 
 
-        if (!NetworkUtils.isNetworkAvailable(requireContext())){
-            Toast.makeText(requireContext(),"NO Internet", Toast.LENGTH_SHORT).show()
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "NO Internet", Toast.LENGTH_SHORT).show()
 
-        }else{
+        } else {
 
             viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
                 listOfFeedItems.add(movies)
                 feedItem.add(FeedItem("Popular Movies", listOfFeedItems))
 
-                Log.e(TAG, "onCreateView: $movies", )
-
-                //childAdapter.submitData(lifecycle, movies)
 
             })
-               viewModel.getTopRatedMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+            viewModel.getTopRatedMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
-                   listOfFeedItems.add(movies)
-                   feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
-
-
-                  // childAdapter.submitData(lifecycle, movies)
-
-              })
-             viewModel.getUpComingMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+                listOfFeedItems.add(movies)
+                feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
 
 
-                 listOfFeedItems.add(movies)
-                 feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
+
+            })
+            viewModel.getUpComingMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
 
-                  // childAdapter.submitData(lifecycle, movies)
+                listOfFeedItems.add(movies)
+                feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
 
-              })
+
+
+
+            })
 
             viewModel.getPopularTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
 
                 listOfFeedItems.add(tvShows)
-                feedItem.add( FeedItem("Popular Tv", listOfFeedItems))
+                feedItem.add(FeedItem("Popular Tv", listOfFeedItems))
 
 
             })
@@ -127,20 +129,17 @@ class HomeFragment : Fragment(), DataPassing {
 
                 feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
 
+                binding.containerHome.visibility = View.VISIBLE
+                binding.loader.root.hide()
+
                 parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
                 recyclerView.adapter = parentAdapter
             })
 
-            Toast.makeText(requireContext()," Internet Available", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
         }
 
-        //initRecyclerView()
-       // performSearch()
 
-        /*binding.searchView.setOnCloseListener {
-            binding.searchRecyclerView.visibility = View.INVISIBLE
-            return@setOnCloseListener true
-        }*/
         binding.searchIcon.setOnClickListener {
 
             val intent = Intent(requireActivity(), SearchableActivity::class.java)
@@ -152,7 +151,7 @@ class HomeFragment : Fragment(), DataPassing {
 
     override fun getId(id: Int, title: String) {
 
-        Log.e(TAG, "getId: $id, $title", )
+        Log.e(TAG, "getId: $id, $title")
         val bottomSheet = DetailBottomSheet()
         val bundle = Bundle()
         bundle.putInt("id", id)
@@ -164,6 +163,7 @@ class HomeFragment : Fragment(), DataPassing {
     override fun onDestroyView() {
 
         super.onDestroyView()
+        feedItem.clear()
         _binding = null
     }
 

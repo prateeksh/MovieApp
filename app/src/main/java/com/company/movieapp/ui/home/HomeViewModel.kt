@@ -35,23 +35,4 @@ class HomeViewModel(private val repository: CommonMediaRepository) : ViewModel()
         return repository.getOnAirData()?.cachedIn(viewModelScope)
     }
 
-
-   /* private fun getBothData() {
-        val fornitorList = service.getFornitori()
-        val puntiVenditaList = service.getPuntiVendita()
-        val dispose =
-            Single.zip<List<Fornitori>, List<PuntiVendita>, Pair<List<Fornitori>, List<PuntiVendita>>>(
-                fornitorList,
-                puntiVenditaList,
-                BiFunction { t1, t2 -> Pair(t1, t2) }
-            ).subscribe(
-                {
-                    val firstApiData = it.first
-                    val secondApiData = it.second
-                },
-                {
-                    //Handle Error Part
-                })
-    }*/
-
 }
