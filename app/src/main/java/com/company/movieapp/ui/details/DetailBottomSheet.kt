@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -195,11 +196,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
             if (!checkDb()) {
                 viewModel.insertInDb(details)
                 binding!!.favorite.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.heart_24,
-                        null
-                    )
+                    ContextCompat.getDrawable(requireContext(), R.drawable.heart_24)
                 )
                 Toast.makeText(requireContext(), "Inserted $titleText", Toast.LENGTH_LONG).show()
             }else{
@@ -231,13 +228,11 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
             }
         })
 
-        var genres: ArrayList<Int> = arrayListOf()
+        val genres: ArrayList<Int> = arrayListOf()
         for (data in details.genres){
-            Log.e(TAG, "showDetailsDialog: genres list $data" , )
             genres.add(data.id!!)
         }
         binding!!.geners.text = getGenresText(genres)
-
         ratings.rating = convertRatings(details.voteAverage!!)
         description.text = details.overview
 

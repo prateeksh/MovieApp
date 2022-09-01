@@ -48,6 +48,7 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:hint="Search for show, movie"
+            android:textColor="@color/white"
             android:imeOptions="actionDone"
             android:inputType="text"
             android:maxLines="1"

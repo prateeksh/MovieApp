@@ -54,4 +54,7 @@ interface ApiService {
     suspend fun performTvSearch(
         @Query("query") query: String,
         @Query("page") page: Int): SearchResponse
+
+    @GET("trending/all/week")
+    suspend fun getTrending() : CommonData<Media>
 }

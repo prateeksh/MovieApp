@@ -1,12 +1,16 @@
 package com.company.movieapp.ui.home
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
 import com.company.movieapp.repository.CommonMediaRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: CommonMediaRepository) : ViewModel() {
 
@@ -35,4 +39,12 @@ class HomeViewModel(private val repository: CommonMediaRepository) : ViewModel()
         return repository.getOnAirData()?.cachedIn(viewModelScope)
     }
 
+    val trendingMedia: MutableLiveData<ArrayList<Media>> = MutableLiveData()
+
+    fun getTrendingMedia() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val response = repository.getTrendingMedia()
+            trendingMedia.postValue(response.results)
+        }
+    }
 }

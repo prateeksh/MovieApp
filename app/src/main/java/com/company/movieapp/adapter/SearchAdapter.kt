@@ -3,6 +3,7 @@ package com.company.movieapp.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.company.movieapp.R
 import com.company.movieapp.databinding.SearchBinding
 import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
@@ -36,17 +37,26 @@ class SearchAdapter(private var list: List<Media>) : RecyclerView.Adapter<Search
     var onItemClick: ((Int, String) -> Unit)? = null
 
     inner class ViewHolder(private var item: SearchBinding) : RecyclerView.ViewHolder(item.root) {
-        fun bind(person: Media) {
-            item.name.text = person.title
+        fun bind(details: Media) {
+
+            val titleText: String = if (details.title != null){
+                details.title!!
+            }else{
+                details.name!!
+
+            }
+
+            item.name.text = titleText
             val uri = Constants.IMAGE_URL
 
             Picasso
                 .get()
-                .load(uri + person.posterPath)
+                .load(uri + details.posterPath)
+                .placeholder(R.drawable.placeholder)
                 .into(item.logo)
 
-            item.ratings.text = person.voteAverage.toString()
-            item.discription.text = person.overview
+            item.ratings.text = details.voteAverage.toString()
+           // item.discription.text = details.overview
         }
 
         /*init {

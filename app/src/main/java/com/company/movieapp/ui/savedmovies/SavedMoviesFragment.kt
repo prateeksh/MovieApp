@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.MainApplication
@@ -47,8 +48,7 @@ class SavedMoviesFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, savedModelFactory).get(SavedMoviesViewModel::class.java)
 
-        recyclerView.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL,false)
+        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
 
         /*childAdapter = ChildAdapter()
         recyclerView.adapter = childAdapter*/

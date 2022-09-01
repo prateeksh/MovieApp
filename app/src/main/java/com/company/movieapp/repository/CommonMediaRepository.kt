@@ -3,6 +3,7 @@ package com.company.movieapp.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.*
 import com.company.movieapp.api.ApiService
+import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
 import com.company.movieapp.paging.*
 import com.company.movieapp.utils.NetworkUtils
@@ -21,6 +22,8 @@ class CommonMediaRepository @Inject constructor(
     private var onAirTv: LiveData<PagingData<Media>>? = null
     private var topRatedTv: LiveData<PagingData<Media>>? = null
 
+
+    private var trendingData: LiveData<CommonData<Media>>? = null
 
     fun getUpcomingMoviesData(): LiveData<PagingData<Media>>? {
         upcomingCommonData = Pager(
@@ -82,4 +85,7 @@ class CommonMediaRepository @Inject constructor(
     suspend fun fetchMovieDetails(id: Int) = movieService.getMovieDetails(id)
 
     suspend fun getSearchResults(query: String, page: Int) = movieService.performTvSearch(query, 1)
+
+    suspend fun getTrendingMedia() = movieService.getTrending()
+
 }
