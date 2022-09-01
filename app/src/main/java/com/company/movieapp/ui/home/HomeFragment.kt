@@ -260,9 +260,10 @@ class HomeFragment : Fragment(), DataPassing {
     override fun onDestroyView() {
 
         super.onDestroyView()
+        binding.slidingViewPager.unregisterOnPageChangeCallback(slidingCallback)
         feedItem.clear()
         _binding = null
-        binding.slidingViewPager.unregisterOnPageChangeCallback(slidingCallback)
+
     }
 
 }

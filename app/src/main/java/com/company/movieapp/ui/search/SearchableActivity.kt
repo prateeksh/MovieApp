@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.MainApplication
+import com.company.movieapp.R
 import com.company.movieapp.adapter.SearchAdapter
 import com.company.movieapp.databinding.ActivitySearchBinding
 import com.company.movieapp.ui.home.HomeViewModel
@@ -30,6 +31,7 @@ class SearchableActivity: AppCompatActivity() {
     private lateinit var searchRecycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.Theme_MovieApp)
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
 
