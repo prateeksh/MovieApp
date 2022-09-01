@@ -61,6 +61,7 @@ open class RecommendationAdapter(memberData: List<Media>) : RecyclerView.Adapter
         Picasso
             .get()
             .load(uri + moviesList[position].posterPath)
+            .fit()
             .into(holder.moviePoster)
 
     }
