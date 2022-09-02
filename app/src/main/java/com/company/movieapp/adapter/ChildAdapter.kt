@@ -21,6 +21,9 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
 
 
     var onItemClick: ((Int, String) -> Unit)? = null
+    var onClick: ((Int, String) -> Unit)? = null
+
+
     var media: Media? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildViewHolder {
@@ -69,6 +72,29 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
             }
 
             return@setOnLongClickListener true
+        }
+
+
+        holder.itemView.setOnClickListener {
+
+            val clickMedia = peek(position)
+            if (clickMedia!!.originalTitle != null) {
+
+                onClick?.invoke(
+                    clickMedia!!.id!!,
+                    Constants.MOVIE
+                )
+                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.originalTitle}", )
+                Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
+            } else {
+                onClick?.invoke(
+                    clickMedia!!.id!!,
+                    Constants.TV
+                )
+
+                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.name}", )
+                Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
+            }
         }
 
     }

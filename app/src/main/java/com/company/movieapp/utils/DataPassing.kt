@@ -4,5 +4,8 @@ import com.company.movieapp.adapter.ChildAdapter
 
 interface DataPassing {
 
+
     fun getId(id: Int, title: String)
+
+    fun getIdOnClick(id: Int, title: String)
 }

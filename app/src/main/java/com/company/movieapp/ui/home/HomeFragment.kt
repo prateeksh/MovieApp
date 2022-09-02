@@ -27,10 +27,9 @@ import com.company.movieapp.adapter.SlidingImageAdapter
 import com.company.movieapp.databinding.FragmentHomeBinding
 import com.company.movieapp.model.*
 import com.company.movieapp.ui.details.DetailBottomSheet
-import com.company.movieapp.utils.DataPassing
-import com.company.movieapp.utils.NetworkUtils
-import com.company.movieapp.utils.hide
-import com.company.movieapp.utils.show
+import com.company.movieapp.ui.details.MediaDetailActivity
+import com.company.movieapp.utils.*
+import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -54,30 +53,12 @@ class HomeFragment : Fragment(), DataPassing {
     private var feedItem = ArrayList<FeedItem>()
 
 
-    private var imagesArray =  ArrayList<String>()
+    //private var imagesArray =  ArrayList<String>()
     private var currentPage = 0
     private lateinit var slidingImageDots: Array<ImageView?>
+
+   // private lateinit var mediaList: MutableList<Media>
     private var slidingDotsCount = 0
-
-    private val slidingCallback = object : ViewPager2.OnPageChangeCallback() {
-        override fun onPageSelected(position: Int) {
-            for (i in 0 until slidingDotsCount) {
-                slidingImageDots[i]?.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        requireContext(),
-                        R.drawable.non_active_dot
-                    )
-                )
-            }
-
-            slidingImageDots[position]?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.active_dot
-                )
-            )
-        }
-    }
 
 
 
@@ -89,35 +70,17 @@ class HomeFragment : Fragment(), DataPassing {
 
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
         recyclerView = binding.feedsList
-
-        (requireActivity().application as MainApplication).applicationComponent.inject(this@HomeFragment)
-
-        viewModel =
-            ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
-
-        binding.containerHome.visibility = View.GONE
-        binding.loader.root.show()
-
-        recyclerView.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.VERTICAL, false
-        )
-
-        recyclerView.setHasFixedSize(true)
-
-
         if (!NetworkUtils.isNetworkAvailable(requireContext())) {
             Toast.makeText(requireContext(), "NO Internet", Toast.LENGTH_SHORT).show()
 
         } else {
-            setupViewPager()
             setupViewModel()
+
             Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
         }
 
-        binding.searchIcon.setOnClickListener {
+        binding.toolbar.searchIcon.setOnClickListener {
             val intent = Intent(requireActivity(), SearchableActivity::class.java)
             startActivity(intent)
         }
@@ -136,46 +99,32 @@ class HomeFragment : Fragment(), DataPassing {
 
     private fun setUpCustomSlidingViewPager(trendingMedia: ArrayList<Media>){
 
+       val mediaList = trendingMedia.subList(10,19)
 
-        slidingDotsCount = trendingMedia.size
-
-        trendingMedia.forEach{
+        slidingDotsCount = mediaList.size
+        val imagesArray = ArrayList<String>()
+        Log.e(TAG, "setUpCustomSlidingViewPager: $mediaList", )
+        mediaList.forEach{
             imagesArray.add(it.posterPath!!)
         }
-
+      /*  val zoomOutPageTransformer = PageTransformer()
         val imageAdapter = SlidingImageAdapter(requireActivity(), imagesArray)
+        binding.slidingViewPager.adapter = imageAdapter
+        TabLayoutMediator(binding.tabLayout, binding.slidingViewPager) { tab, position ->
+              zoomOutPageTransformer.transformPage(tab.view, position.toFloat())
+        }.attach()*/
 
-        binding.slidingViewPager.apply {
-            adapter = imageAdapter
-            registerOnPageChangeCallback(slidingCallback)
+        var currentPage = 0
+        val dotsIndicator = binding.dotsIndicator
+        val viewPager = binding.slidingViewPager
+        val adapter = SlidingImageAdapter(requireActivity(), imagesArray)
+        viewPager.adapter = adapter
+        dotsIndicator.attachTo(viewPager)
+
+        val zoomOutPageTransformer = PageTransformer()
+        viewPager.setPageTransformer { page, position ->
+            zoomOutPageTransformer.transformPage(page, position)
         }
-
-        slidingImageDots = arrayOfNulls(slidingDotsCount)
-
-        for (i in 0 until slidingDotsCount) {
-            slidingImageDots[i] = ImageView(requireContext())
-            slidingImageDots[i]?.setImageDrawable(
-                ContextCompat.getDrawable(
-                    requireContext(),
-                    R.drawable.non_active_dot
-                )
-            )
-            val params =
-                LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-                )
-
-            params.setMargins(8, 0, 8, 0)
-            binding.sliderDots.addView(slidingImageDots[i], params)
-        }
-
-        slidingImageDots[0]?.setImageDrawable(
-            ContextCompat.getDrawable(
-                requireContext(),
-                R.drawable.active_dot
-            )
-        )
 
         val handler = Handler()
         val update = Runnable {
@@ -184,8 +133,9 @@ class HomeFragment : Fragment(), DataPassing {
             }
 
             //The second parameter ensures smooth scrolling
-            binding.slidingViewPager.setCurrentItem(currentPage++, true)
+            viewPager.setCurrentItem(currentPage++, true)
         }
+
 
         Timer().schedule(object : TimerTask() {
             // task to be scheduled
@@ -193,10 +143,30 @@ class HomeFragment : Fragment(), DataPassing {
                 handler.post(update)
             }
         }, 3500, 3500)
+
     }
 
 
     private fun setupViewModel(){
+
+        (requireActivity().application as MainApplication).applicationComponent.inject(this@HomeFragment)
+
+        viewModel =
+            ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+
+        binding.containerHome.visibility = View.GONE
+        binding.loader.root.show()
+
+        recyclerView.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL, false
+        )
+
+        recyclerView.setHasFixedSize(true)
+
+
+
+
         viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
             listOfFeedItems.add(movies)
@@ -243,6 +213,8 @@ class HomeFragment : Fragment(), DataPassing {
             parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
             recyclerView.adapter = parentAdapter
         })
+
+        setupViewPager()
     }
 
 
@@ -257,10 +229,16 @@ class HomeFragment : Fragment(), DataPassing {
         bottomSheet.show(parentFragmentManager, DetailBottomSheet.TAG)
     }
 
+    override fun getIdOnClick(id: Int, title: String) {
+        val intent = Intent(requireActivity(),MediaDetailActivity::class.java)
+        intent.putExtra("id", id)
+        intent.putExtra("title", title)
+        startActivity(intent)
+    }
+
     override fun onDestroyView() {
 
         super.onDestroyView()
-        binding.slidingViewPager.unregisterOnPageChangeCallback(slidingCallback)
         feedItem.clear()
         _binding = null
 

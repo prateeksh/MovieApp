@@ -13,7 +13,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.company.movieapp.MainApplication
 import com.company.movieapp.R
-import com.company.movieapp.databinding.ActivityDetailsBinding
+import com.company.movieapp.databinding.DetailBottomSheetBinding
 import com.company.movieapp.model.Media
 import com.company.movieapp.paging.TopRatedTvPagingSource
 import com.company.movieapp.room.MediaDatabase
@@ -42,7 +42,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
     val title: String?
         get() = arguments?.getString("title")
 
-    private var _binding: ActivityDetailsBinding? = null
+    private var _binding: DetailBottomSheetBinding? = null
     private val binding get() = _binding
 
     @Inject
@@ -59,7 +59,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = ActivityDetailsBinding.inflate(inflater, container, false)
+        _binding = DetailBottomSheetBinding.inflate(inflater, container, false)
 
         (requireActivity().application as MainApplication).applicationComponent.injectDetails(this)
 
@@ -114,7 +114,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
 
         }
-        viewModel.checkDbForData(id!!)
+        /*viewModel.checkDbForData(id!!)
 
         viewModel.dataExits.observe(viewLifecycleOwner, Observer {
 
@@ -137,9 +137,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
                     )
                 )
             }
-        })
-
-
+        })*/
 
     }
 
@@ -191,7 +189,7 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
         }
 
-        binding!!.favorite.setOnClickListener {
+       /* binding!!.favorite.setOnClickListener {
             viewModel.checkDbForData(id!!)
             if (!checkDb()) {
                 viewModel.insertInDb(details)
@@ -202,17 +200,17 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
             }else{
                 Toast.makeText(requireContext(), "Already in database", Toast.LENGTH_LONG).show()
             }
-        }
+        }*/
 
 
-        val img = binding!!.imageView
+        val img = binding!!.mediaImageSheet
         val ratings = binding!!.ratingBar
         val description = binding!!.overview
 
 
 
         Log.e(TAG, "showDetailsDialog: $titleText", )
-        var isShow = true
+        /*var isShow = true
         var scrollRange = -1
         binding!!.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
             if (scrollRange == -1){
@@ -226,13 +224,10 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
                 binding!!.collapsingToolbar.title = " "
                 isShow = false
             }
-        })
+        })*/
 
-        val genres: ArrayList<Int> = arrayListOf()
-        for (data in details.genres){
-            genres.add(data.id!!)
-        }
-        binding!!.geners.text = getGenresText(genres)
+        binding!!.mediaTitleSheet.text = titleText
+
         ratings.rating = convertRatings(details.voteAverage!!)
         description.text = details.overview
 
@@ -254,11 +249,16 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
             countries.append(details.iso31661).append(" ")
         }
 
-        binding!!.country.text = countries
-
+        //binding!!.country.text = countries
+        val genres: ArrayList<Int> = arrayListOf()
+        for (data in details.genres){
+            genres.add(data.id!!)
+        }
+        binding!!.geners.text = getGenresText(genres)
         if (details.runTime == null ){
-            binding!!.length.text = "Seasons"
-            binding!!.lengthMovie.text = details.numberOfSeasons.toString()
+            val appendSeasonsInfo = StringBuilder()
+            //binding!!.length.text = "Seasons"
+            binding!!.lengthMovie.text = appendSeasonsInfo.append(details.numberOfSeasons.toString()).append(" ").append("Season")
         }else{
 
             val appendMinutes = StringBuilder()

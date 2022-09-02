@@ -13,6 +13,7 @@
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/home_icon_24.xml" value="0.1195" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.118" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/placeholder.xml" value="0.1195" />
+        <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/selector.xml" value="0.135" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable-v24/splash_bg.xml" value="0.1195" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/active_dot.xml" value="0.1195" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/detail_image_round.xml" value="0.1335" />
@@ -25,11 +26,14 @@
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/non_active_dot.xml" value="0.1195" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/search_icon.xml" value="0.127" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/splash_gradient.xml" value="0.1195" />
+        <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/drawable/tab_selector.xml" value="0.135" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/active_dot.xml" value="0.23278985507246377" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/activity_details.xml" value="0.4" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/activity_main.xml" value="0.2" />
+        <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/activity_media_detail.xml" value="0.2" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/activity_search.xml" value="0.264" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/bottom_sheet_details.xml" value="0.72" />
+        <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/detail_bottom_sheet.xml" value="0.264" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/fragment_details.xml" value="0.23007246376811594" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/fragment_notifications.xml" value="0.22826086956521738" />
@@ -43,6 +47,7 @@
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/progress_bar_layout.xml" value="0.4" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/saved_movies_fragment.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/search.xml" value="0.536" />
+        <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/layout/toolbar.xml" value="0.253125" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.17592592592592593" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/menu/dashboard.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/Prateek/AndroidStudioProjects/MovieApp/app/src/main/res/xml/searchable.xml" value="0.25416666666666665" />

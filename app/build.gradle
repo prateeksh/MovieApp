@@ -82,8 +82,8 @@ dependencies {
     def paging_version = "3.1.1"
     implementation("androidx.paging:paging-runtime:$paging_version")
 
-    implementation "com.airbnb.android:epoxy:4.5.0"
-    kapt "com.airbnb.android:epoxy-processor:4.5.0"
-    implementation 'com.airbnb.android:epoxy-paging:4.5.0'
+
+
+    implementation("com.tbuonomo:dotsindicator:4.3")
 
 }

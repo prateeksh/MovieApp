@@ -63,7 +63,15 @@ open class ParentAdapter(private val movies: ArrayList<FeedItem>,
 
         childAdapter.onItemClick = { itemId: Int, itemTitle: String ->
             listener.getId(itemId, itemTitle)
+
         }
+
+        childAdapter.onClick = { id: Int, title: String ->
+            listener.getIdOnClick(id, title)
+
+        }
+
+
 
     }
 }

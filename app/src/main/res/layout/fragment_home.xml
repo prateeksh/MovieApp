@@ -21,54 +21,15 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-
-            <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/app_bar_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                app:elevation="0dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <LinearLayout
-                    android:id="@+id/toolbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="?actionBarSize"
-                    android:divider="@drawable/divider"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal"
-                    android:paddingHorizontal="16dp"
-                    android:showDividers="middle"
-                    app:layout_scrollFlags="scroll|enterAlways">
-
-                    <ImageView
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/movie_logo" />
-
-                    <Space
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1" />
-
-                    <ImageView
-                        android:id="@+id/search_icon"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:background="?selectableItemBackgroundBorderless"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:padding="4dp"
-                        android:src="@drawable/ic_search" />
-                </LinearLayout>
-
-            </com.google.android.material.appbar.AppBarLayout>
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar"
+                android:visibility="visible" />
 
 
             <FrameLayout
                 android:id="@+id/pager_container"
-                app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
+                app:layout_constraintTop_toBottomOf="@id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -77,13 +38,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
 
-                <LinearLayout
-                    android:id="@+id/slider_dots"
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/dots_indicator"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp"
-                    android:layout_gravity="bottom|center_horizontal"
-                    android:orientation="horizontal" />
+                    app:dotsColor="@color/lightGrey"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="16dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    android:layout_gravity="center_horizontal|bottom"
+                    app:selectedDotColor="@color/primary_color"
+                    app:progressMode="true"
+                    />
             </FrameLayout>
 
 
@@ -94,8 +61,10 @@
                 android:layout_marginTop="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/pager_container" />
+                app:layout_constraintTop_toBottomOf="@id/pager_container"
+                app:layout_constraintVertical_bias="1.0" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
