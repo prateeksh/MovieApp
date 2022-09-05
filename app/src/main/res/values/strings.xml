@@ -3,4 +3,6 @@
     <string name="title_home">Home</string>
     <string name="saved_movies">Saved Movies</string>
     <string name="search_hint">Search</string>
+
+    <string name="API_KEY">60af9fe8e3245c53ad9c4c0af82d56d6</string>
 </resources>

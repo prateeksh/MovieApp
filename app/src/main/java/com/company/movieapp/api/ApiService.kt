@@ -2,6 +2,7 @@ package com.company.movieapp.api
 
 import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
+import com.company.movieapp.model.Person
 import com.company.movieapp.model.SearchResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -51,10 +52,13 @@ interface ApiService {
     suspend fun getRecommendedTv(@Path("id") id: Int): Media
 
     @GET("search/multi")
-    suspend fun performTvSearch(
+    suspend fun performSearch(
         @Query("query") query: String,
         @Query("page") page: Int): SearchResponse
 
     @GET("trending/all/week")
     suspend fun getTrending() : CommonData<Media>
+
+    @GET("person/{id}")
+    suspend fun getPersonMovieDetail(@Path("id") id:Int): Person
 }

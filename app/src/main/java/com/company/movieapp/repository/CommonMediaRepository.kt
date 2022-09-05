@@ -84,8 +84,14 @@ class CommonMediaRepository @Inject constructor(
 
     suspend fun fetchMovieDetails(id: Int) = movieService.getMovieDetails(id)
 
-    suspend fun getSearchResults(query: String, page: Int) = movieService.performTvSearch(query, 1)
+    suspend fun getSearchResults(query: String) = movieService.performSearch(query, 1)
 
     suspend fun getTrendingMedia() = movieService.getTrending()
+
+    suspend fun getRecommendedTv(id: Int) = movieService.getRecommendedTv(id)
+
+    suspend fun getRecommendedMovie(id: Int) = movieService.getRecommendedMovie(id)
+
+    suspend fun fetchPersonDetails(id: Int) = movieService.getPersonMovieDetail(id)
 
 }

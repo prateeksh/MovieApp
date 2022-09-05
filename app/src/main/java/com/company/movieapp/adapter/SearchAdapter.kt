@@ -1,18 +1,16 @@
 package com.company.movieapp.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.company.movieapp.R
 import com.company.movieapp.databinding.SearchBinding
-import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
-import com.company.movieapp.model.SearchResponse
 import com.company.movieapp.utils.Constants
-import com.squareup.picasso.Picasso
+import com.company.movieapp.utils.hide
 
-class SearchAdapter(private var list: List<Media>) : RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
-
+class SearchAdapter(private var list: List<Media>) :
+    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
@@ -39,42 +37,36 @@ class SearchAdapter(private var list: List<Media>) : RecyclerView.Adapter<Search
     inner class ViewHolder(private var item: SearchBinding) : RecyclerView.ViewHolder(item.root) {
         fun bind(details: Media) {
 
-            val titleText: String = if (details.title != null){
+
+            val titleText: String = if (details.title != null) {
                 details.title!!
-            }else{
+            } else {
                 details.name!!
 
             }
 
             item.name.text = titleText
-            val uri = Constants.IMAGE_URL
 
-            Picasso
-                .get()
-                .load(uri + details.posterPath)
-                .placeholder(R.drawable.placeholder)
-                .into(item.logo)
-
-            item.ratings.text = details.voteAverage.toString()
-           // item.discription.text = details.overview
-        }
-
-        /*init {
             itemView.setOnClickListener {
-                if (list.results[adapterPosition].originalTitle != null) {
+                if(details.mediaType == Constants.MOVIE) {
 
                     onItemClick?.invoke(
-                        list.results[adapterPosition].id!!,
+                        details.id!!,
                         Constants.MOVIE
                     )
-                }else{
+                } else if (details.mediaType == Constants.TV){
                     onItemClick?.invoke(
-                        list.results[adapterPosition].id!!,
+                        details.id!!,
                         Constants.TV
                     )
                 }
+                else{
+                    onItemClick?.invoke(
+                        details.id!!,
+                        Constants.PERSON
+                    )
+                }
             }
-        }*/
-
+        }
     }
 }

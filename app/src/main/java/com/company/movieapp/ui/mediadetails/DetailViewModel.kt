@@ -1,6 +1,5 @@
-package com.company.movieapp.ui.details
+package com.company.movieapp.ui.mediadetails
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,7 +46,12 @@ class DetailViewModel(private val repository: CommonMediaRepository, private val
 
     fun insertInDb(media: Media){
         viewModelScope.launch(Dispatchers.IO) {
-            database.mediaDao().insertMedia(media)
+            try {
+                database.mediaDao().insertMedia(media)
+            }catch (e: Exception){
+                e.message
+            }
+
         }
     }
 
@@ -55,7 +59,6 @@ class DetailViewModel(private val repository: CommonMediaRepository, private val
 
     fun checkDbForData(id: Int): MutableLiveData<Boolean> {
         viewModelScope.launch(Dispatchers.IO) {
-            Log.e("Detail View Model", "checkDbForData: ", )
             dataExits.postValue(database.mediaDao().checkExistence(id.toString()))
         }
         return dataExits

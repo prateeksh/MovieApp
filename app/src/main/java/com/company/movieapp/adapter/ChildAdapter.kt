@@ -56,18 +56,18 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
             if (clickMedia!!.originalTitle != null) {
 
                 onItemClick?.invoke(
-                    clickMedia!!.id!!,
+                    clickMedia.id!!,
                     Constants.MOVIE
                 )
-                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.originalTitle}", )
+                Log.e(TAG, "id generated : ${clickMedia.id} ${clickMedia.originalTitle}", )
                 Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
             } else {
                 onItemClick?.invoke(
-                    clickMedia!!.id!!,
+                    clickMedia.id!!,
                     Constants.TV
                 )
 
-                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.name}", )
+                Log.e(TAG, "id generated : ${clickMedia.id} ${clickMedia.name}", )
                 Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
             }
 
@@ -81,18 +81,18 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
             if (clickMedia!!.originalTitle != null) {
 
                 onClick?.invoke(
-                    clickMedia!!.id!!,
+                    clickMedia.id!!,
                     Constants.MOVIE
                 )
-                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.originalTitle}", )
+                Log.e(TAG, "id generated : ${clickMedia.id} ${clickMedia.originalTitle}", )
                 Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
             } else {
                 onClick?.invoke(
-                    clickMedia!!.id!!,
+                    clickMedia.id!!,
                     Constants.TV
                 )
 
-                Log.e(TAG, "id generated : ${clickMedia!!.id} ${clickMedia!!.name}", )
+                Log.e(TAG, "id generated : ${clickMedia.id} ${clickMedia.name}", )
                 Log.e(TAG, "onBindViewHolder: item pos ${peek(position)}", )
             }
         }

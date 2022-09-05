@@ -20,7 +20,7 @@ class TopRatedMoviePagingSource (private val movieApi: ApiService,): PagingSourc
             val response = movieApi.getTopRatedMovies(position)
 
             val prevKey = if (position == 1) null else position - 1
-            val nextKey = if (position == response!!.totalPages) null else position + 1
+            val nextKey = if (position == response.totalPages) null else position + 1
 
             Log.e("TAG", "Paging source response ${response.totalPages} $position")
             Log.e("TAG", "Paging prev and next $prevKey, $nextKey")

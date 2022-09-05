@@ -1,30 +1,19 @@
-package com.company.movieapp.ui.details
+package com.company.movieapp.ui.mediadetails
 
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.company.movieapp.MainApplication
-import com.company.movieapp.R
 import com.company.movieapp.databinding.DetailBottomSheetBinding
 import com.company.movieapp.model.Media
-import com.company.movieapp.paging.TopRatedTvPagingSource
-import com.company.movieapp.room.MediaDatabase
 import com.company.movieapp.utils.*
-import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.google.android.material.snackbar.Snackbar
 import com.squareup.picasso.Picasso
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
@@ -245,8 +234,8 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
 
         val countries = StringBuilder()
-        for (details in details.productionCountries) {
-            countries.append(details.iso31661).append(" ")
+        for (detail in details.productionCountries) {
+            countries.append(detail.iso31661).append(" ")
         }
 
         //binding!!.country.text = countries
@@ -266,22 +255,10 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-    private fun convertRatings(ratings: Double): Float{
-
-        val rate = ratings/2
-        return rate.toFloat()
-    }
-
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-
-    }
 }

@@ -1,20 +1,22 @@
-package com.company.movieapp.ui.details
+package com.company.movieapp.ui.mediadetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.company.movieapp.MainApplication
 import com.company.movieapp.R
 import com.company.movieapp.databinding.ActivityMediaDetailBinding
-import com.company.movieapp.databinding.DetailBottomSheetBinding
 import com.company.movieapp.model.Media
 import com.company.movieapp.utils.*
 import com.google.android.material.appbar.AppBarLayout
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
+private const val TAG = "MediaDetailActivity"
 class MediaDetailActivity : AppCompatActivity() {
 
     val id: Int
@@ -32,16 +34,20 @@ class MediaDetailActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MovieApp)
+
         super.onCreate(savedInstanceState)
 
         binding = ActivityMediaDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        supportActionBar?.hide()
-        setUpViewModel()
-        fetchData()
+       // supportActionBar?.hide()
 
+        if (savedInstanceState == null){
+            setUpViewModel()
+            fetchData()
+        }
     }
+
+
 
 
     private fun setUpViewModel(){
@@ -50,7 +56,7 @@ class MediaDetailActivity : AppCompatActivity() {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
 
-        if (title == Constants.TV){
+        if (title == Constants.TV ){
 
             viewModel.detailsTv.observe(this) {
                 if (it.isLoading && it.data == null) {
@@ -60,7 +66,6 @@ class MediaDetailActivity : AppCompatActivity() {
                     showDetailsDialog(it.data)
                 }
             }
-
 
         }else{
 
@@ -75,30 +80,22 @@ class MediaDetailActivity : AppCompatActivity() {
 
 
         }
-        /*viewModel.checkDbForData(id!!)
+        viewModel.checkDbForData(id)
 
-        viewModel.dataExits.observe(viewLifecycleOwner, Observer {
+        viewModel.dataExits.observe(this, Observer {
 
             Log.e(TAG, "setUpViewModel: $it", )
 
             if (it){
-                binding!!.favorite.setImageDrawable(
+                binding.favorite.setImageDrawable(
                     ResourcesCompat.getDrawable(
                         resources,
                         R.drawable.heart_24,
                         null
                     )
                 )
-            }else{
-                binding!!.favorite.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.heart_outline,
-                        null
-                    )
-                )
             }
-        })*/
+        })
 
     }
 
@@ -150,18 +147,22 @@ class MediaDetailActivity : AppCompatActivity() {
 
         }
 
-        /* binding!!.favorite.setOnClickListener {
-             viewModel.checkDbForData(id!!)
+         binding.favorite.setOnClickListener {
+             viewModel.checkDbForData(id)
              if (!checkDb()) {
                  viewModel.insertInDb(details)
-                 binding!!.favorite.setImageDrawable(
-                     ContextCompat.getDrawable(requireContext(), R.drawable.heart_24)
+                 binding.favorite.setImageDrawable(
+                     ResourcesCompat.getDrawable(
+                         resources,
+                         R.drawable.heart_24,
+                         null
+                    )
                  )
-                 Toast.makeText(requireContext(), "Inserted $titleText", Toast.LENGTH_LONG).show()
+                 Toast.makeText(applicationContext, "Inserted $titleText", Toast.LENGTH_LONG).show()
              }else{
-                 Toast.makeText(requireContext(), "Already in database", Toast.LENGTH_LONG).show()
+                 Toast.makeText(applicationContext, "Already in database", Toast.LENGTH_LONG).show()
              }
-         }*/
+         }
 
 
         val img = binding.imageView
@@ -204,16 +205,18 @@ class MediaDetailActivity : AppCompatActivity() {
 
 
         val countries = StringBuilder()
-        for (details in details.productionCountries) {
-            countries.append(details.iso31661).append(" ")
+        for (detail in details.productionCountries) {
+            countries.append(detail.iso31661).append(" ")
         }
 
-        //binding!!.country.text = countries
+        binding.country.text = countries
+
         val genres: ArrayList<Int> = arrayListOf()
         for (data in details.genres){
             genres.add(data.id!!)
         }
         binding.geners.text = getGenresText(genres)
+
         if (details.runTime == null ){
             val appendSeasonsInfo = StringBuilder()
             //binding!!.length.text = "Seasons"

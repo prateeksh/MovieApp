@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:fitsSystemWindows="true"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark">
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark"
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/collapsingToolbar"
@@ -32,7 +33,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@tools:sample/avatars" />
+                tools:srcCompat="@drawable/placeholder" />
 
             <View
                 android:id="@+id/toolbar_view"
@@ -53,7 +54,6 @@
 
 
     <androidx.core.widget.NestedScrollView
-
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
@@ -61,12 +61,13 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
             <include
                 android:id="@+id/loader"
                 layout="@layout/item_loader"
-                android:visibility="gone"/>
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/geners"
@@ -86,8 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:longClickable="false"
                 android:isIndicator="true"
+                android:longClickable="false"
                 android:rating="3"
                 android:theme="@style/RatingBar"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -198,7 +199,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="TextView"
+                android:hint="US"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="@+id/country_text"
                 app:layout_constraintStart_toStartOf="@+id/country_text"
@@ -219,4 +220,5 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

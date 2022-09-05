@@ -18,7 +18,7 @@ class SearchViewModel(private val repository: CommonMediaRepository): ViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             searchResultsLoading.postValue(true)
             try {
-                val response = repository.getSearchResults(query, 1)
+                val response = repository.getSearchResults(query)
                 searchResults.postValue(response.results)
                 searchResultsLoading.postValue(false)
             } catch (e: Exception) {

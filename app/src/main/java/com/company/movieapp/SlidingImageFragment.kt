@@ -39,7 +39,6 @@ class SlidingImageFragment: Fragment() {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val position = requireArguments().getInt(ARG_POSITION)
         val landingImagesArray = requireArguments().getString(IMAGE)
 
         Picasso

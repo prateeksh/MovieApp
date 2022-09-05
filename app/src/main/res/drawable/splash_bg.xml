@@ -4,6 +4,6 @@
         android:drawable="@drawable/splash_gradient"/>
     <item>
         <bitmap android:gravity="center"
-            android:src="@drawable/movie_logo"/>
+            android:src="@drawable/ic_logo"/>
     </item>
 </layer-list>

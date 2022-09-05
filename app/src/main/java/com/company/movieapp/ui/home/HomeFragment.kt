@@ -3,38 +3,29 @@ package com.company.movieapp.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import com.company.movieapp.MainApplication
-import com.company.movieapp.R
 import com.company.movieapp.ui.search.SearchableActivity
 import com.company.movieapp.adapter.ParentAdapter
-import com.company.movieapp.adapter.SearchAdapter
 import com.company.movieapp.adapter.SlidingImageAdapter
 import com.company.movieapp.databinding.FragmentHomeBinding
 import com.company.movieapp.model.*
-import com.company.movieapp.ui.details.DetailBottomSheet
-import com.company.movieapp.ui.details.MediaDetailActivity
+import com.company.movieapp.ui.mediadetails.DetailBottomSheet
+import com.company.movieapp.ui.mediadetails.MediaDetailActivity
 import com.company.movieapp.utils.*
-import com.google.android.material.tabs.TabLayoutMediator
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
-private const val TAG = "HomeFragment"
 
 class HomeFragment : Fragment(), DataPassing {
 
@@ -48,16 +39,6 @@ class HomeFragment : Fragment(), DataPassing {
     private lateinit var viewModel: HomeViewModel
     private lateinit var parentAdapter: ParentAdapter
     private lateinit var recyclerView: RecyclerView
-
-    private var listOfFeedItems = ArrayList<PagingData<Media>>()
-    private var feedItem = ArrayList<FeedItem>()
-
-
-    //private var imagesArray =  ArrayList<String>()
-    private var currentPage = 0
-    private lateinit var slidingImageDots: Array<ImageView?>
-
-   // private lateinit var mediaList: MutableList<Media>
     private var slidingDotsCount = 0
 
 
@@ -68,31 +49,49 @@ class HomeFragment : Fragment(), DataPassing {
         savedInstanceState: Bundle?
     ): View {
 
-
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         recyclerView = binding.feedsList
-        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
-            Toast.makeText(requireContext(), "NO Internet", Toast.LENGTH_SHORT).show()
 
-        } else {
-            setupViewModel()
-
-            Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
+        binding.swipeToRefresh.setOnRefreshListener {
+            checkAndInitializeViewModel()
+        }
+        if(savedInstanceState == null) {
+            checkAndInitializeViewModel()
         }
 
-        binding.toolbar.searchIcon.setOnClickListener {
+        binding.searchIcon.setOnClickListener {
             val intent = Intent(requireActivity(), SearchableActivity::class.java)
             startActivity(intent)
         }
+    }
 
-        return binding.root
+     private fun checkAndInitializeViewModel(){
+
+        if (!NetworkUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "NO Internet", Toast.LENGTH_SHORT).show()
+            binding.loader.root.hide()
+            binding.swipeToRefresh.isRefreshing = false
+        }
+        else {
+
+            setupViewModel()
+            Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
+            binding.swipeToRefresh.isRefreshing = false
+        }
+
     }
 
     private fun setupViewPager(){
 
         viewModel.getTrendingMedia()
         viewModel.trendingMedia.observe(viewLifecycleOwner, Observer { trendingMedia ->
-            setUpCustomSlidingViewPager(trendingMedia)
+            //setUpCustomSlidingViewPager(trendingMedia)
         })
     }
 
@@ -103,16 +102,10 @@ class HomeFragment : Fragment(), DataPassing {
 
         slidingDotsCount = mediaList.size
         val imagesArray = ArrayList<String>()
-        Log.e(TAG, "setUpCustomSlidingViewPager: $mediaList", )
+
         mediaList.forEach{
             imagesArray.add(it.posterPath!!)
         }
-      /*  val zoomOutPageTransformer = PageTransformer()
-        val imageAdapter = SlidingImageAdapter(requireActivity(), imagesArray)
-        binding.slidingViewPager.adapter = imageAdapter
-        TabLayoutMediator(binding.tabLayout, binding.slidingViewPager) { tab, position ->
-              zoomOutPageTransformer.transformPage(tab.view, position.toFloat())
-        }.attach()*/
 
         var currentPage = 0
         val dotsIndicator = binding.dotsIndicator
@@ -132,7 +125,6 @@ class HomeFragment : Fragment(), DataPassing {
                 currentPage = 0
             }
 
-            //The second parameter ensures smooth scrolling
             viewPager.setCurrentItem(currentPage++, true)
         }
 
@@ -146,13 +138,20 @@ class HomeFragment : Fragment(), DataPassing {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
 
     private fun setupViewModel(){
+
 
         (requireActivity().application as MainApplication).applicationComponent.inject(this@HomeFragment)
 
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+
+        val listOfFeedItems = ArrayList<PagingData<Media>>()
+        val feedItem = ArrayList<FeedItem>()
 
         binding.containerHome.visibility = View.GONE
         binding.loader.root.show()
@@ -163,8 +162,6 @@ class HomeFragment : Fragment(), DataPassing {
         )
 
         recyclerView.setHasFixedSize(true)
-
-
 
 
         viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
@@ -220,7 +217,6 @@ class HomeFragment : Fragment(), DataPassing {
 
     override fun getId(id: Int, title: String) {
 
-        Log.e(TAG, "getId: $id, $title")
         val bottomSheet = DetailBottomSheet()
         val bundle = Bundle()
         bundle.putInt("id", id)
@@ -239,7 +235,6 @@ class HomeFragment : Fragment(), DataPassing {
     override fun onDestroyView() {
 
         super.onDestroyView()
-        feedItem.clear()
         _binding = null
 
     }

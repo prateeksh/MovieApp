@@ -10,5 +10,6 @@ object Constants {
 
     const val MOVIE = "movie"
     const val TV = "tv"
+    const val PERSON = "person"
     const val LIST_SCROLLING = 20
 }

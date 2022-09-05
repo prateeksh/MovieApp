@@ -24,3 +24,9 @@ fun getReleaseYear(yearRec: String): String? {
         year
     }
 }
+
+fun convertRatings(ratings: Double): Float{
+
+    val rate = ratings/2
+    return rate.toFloat()
+}

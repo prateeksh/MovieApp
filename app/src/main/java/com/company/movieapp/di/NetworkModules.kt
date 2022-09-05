@@ -1,7 +1,12 @@
 package com.company.movieapp.di
 
+import android.content.Context
+import android.content.res.Resources
 import android.util.Log
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import com.company.movieapp.BuildConfig
+import com.company.movieapp.R
 import com.company.movieapp.api.ApiService
 import com.company.movieapp.model.Media
 import com.company.movieapp.utils.Constants

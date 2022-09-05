@@ -17,7 +17,7 @@ class OnAirTvPagingSource (private val movieApi: ApiService,): PagingSource<Int,
             val response = movieApi.getOnAirTv(position)
 
             val prevKey = if (position == 1) null else position - 1
-            val nextKey = if (position == response!!.totalPages) null else position + 1
+            val nextKey = if (position == response.totalPages) null else position + 1
 
             LoadResult.Page(
                 data = response.results,

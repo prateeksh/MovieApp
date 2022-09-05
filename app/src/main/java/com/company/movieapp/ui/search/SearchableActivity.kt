@@ -1,7 +1,5 @@
 package com.company.movieapp.ui.search
 
-import android.app.Activity
-import android.app.SearchManager
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -10,11 +8,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.MainApplication
-import com.company.movieapp.R
+import com.company.movieapp.ui.person.PersonDetailsActivity
 import com.company.movieapp.adapter.SearchAdapter
 import com.company.movieapp.databinding.ActivitySearchBinding
-import com.company.movieapp.ui.home.HomeViewModel
-import com.company.movieapp.ui.home.HomeViewModelFactory
+import com.company.movieapp.ui.mediadetails.MediaDetailActivity
+import com.company.movieapp.utils.Constants
 import com.company.movieapp.utils.hide
 import com.company.movieapp.utils.show
 import javax.inject.Inject
@@ -31,7 +29,7 @@ class SearchableActivity: AppCompatActivity() {
     private lateinit var searchRecycler: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        setTheme(R.style.Theme_MovieApp)
+
         super.onCreate(savedInstanceState)
         binding = ActivitySearchBinding.inflate(layoutInflater)
 
@@ -41,7 +39,7 @@ class SearchableActivity: AppCompatActivity() {
 
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(SearchViewModel::class.java)
-        supportActionBar?.hide()
+        //supportActionBar?.hide()
 
         setupUI()
         setUpViewModel()
@@ -51,6 +49,7 @@ class SearchableActivity: AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
         binding.clearSearchIcon.setOnClickListener {
             binding.searchTextInput.setText("")
+
         }
         binding.searchTextInput.addTextChangedListener {
             val query = it.toString().trim()
@@ -84,6 +83,26 @@ class SearchableActivity: AppCompatActivity() {
         viewModel.searchResults.observe(this) {
             searchAdapter = SearchAdapter(it)
             searchRecycler.adapter = searchAdapter
+
+            searchAdapter.onItemClick = { id: Int, title: String ->
+
+                if (title != Constants.PERSON) {
+
+                    val intent = Intent(this, MediaDetailActivity::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("title", title)
+                    startActivity(intent)
+
+                }else{
+
+                    //move to person detail activity
+                    /*val intent = Intent(this, PersonDetailsActivity::class.java)
+                    intent.putExtra("id", id)
+                    intent.putExtra("title", title)
+                    startActivity(intent)*/
+
+                }
+            }
         }
     }
 }
