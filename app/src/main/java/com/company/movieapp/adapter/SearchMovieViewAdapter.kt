@@ -23,27 +23,9 @@ open class SearchMovieViewAdapter(var memberData: Person) : RecyclerView.Adapter
 
     class SearchMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        /*init {
-            itemView.setOnClickListener {
-                if (moviesList[adapterPosition].originalTitle != null) {
-
-                    onItemClick?.invoke(
-                        moviesList[adapterPosition].id!!,
-                        Constants.MOVIE
-                    )
-                }else{
-                    onItemClick?.invoke(
-                        moviesList[adapterPosition].id!!,
-                        Constants.TV
-                    )
-                }
-            }
-        }*/
-
-
         val moviePoster : ImageView = itemView.findViewById(R.id.movie_img)
         val title : TextView = itemView.findViewById(R.id.movie_title)
-        val rating: RatingBar = itemView.findViewById(R.id.ratingBar)
+        val rating: TextView = itemView.findViewById(R.id.ratings_movie)
         val year : TextView = itemView.findViewById(R.id.year_mov)
 
     }
@@ -70,11 +52,26 @@ open class SearchMovieViewAdapter(var memberData: Person) : RecyclerView.Adapter
             .into(holder.moviePoster)
 
         holder.title.text = list.title
-        holder.rating.rating = convertRatings(list.voteAverage!!)
-       /* if (list.releaseDate != null) {
+        holder.rating.text = list.voteAverage.toString()
+        if (list.releaseDate != null && list.releaseDate != "") {
             Log.e("TAG", "onBindViewHolder: ${list.releaseDate}", )
             holder.year.text = getReleaseYear(list.releaseDate.toString())
-        }*/
+        }
+
+        holder.itemView.setOnClickListener {
+            if (list.originalTitle != null) {
+
+                onItemClick?.invoke(
+                    list.id!!,
+                    Constants.MOVIE
+                )
+            }else{
+                onItemClick?.invoke(
+                    list.id!!,
+                    Constants.TV
+                )
+            }
+        }
     }
 
     override fun getItemCount(): Int = memberData.cast.size

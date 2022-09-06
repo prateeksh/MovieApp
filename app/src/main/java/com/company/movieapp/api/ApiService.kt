@@ -26,8 +26,8 @@ interface ApiService {
     @GET("movie/{id}")
     suspend fun getMovieDetails(@Path("id") id: Int) : Media
 
-    @GET("movie/{id}/recommendations&page=1")
-    suspend fun getRecommendedMovie(@Path("id") id: Int): Media
+    @GET("movie/{id}/similar&page=1")
+    suspend fun getSimilarMovie(@Path("id") id: Int): Media
 
 
 
@@ -46,8 +46,8 @@ interface ApiService {
     @GET("tv/{id}")
     suspend fun getTvDetails(@Path("id") id: Int) : Media
 
-    @GET("tv/{id}/recommendations&page=1")
-    suspend fun getRecommendedTv(@Path("id") id: Int): Media
+    @GET("tv/{id}/similar&page=1")
+    suspend fun getSimilarTv(@Path("id") id: Int): Media
 
     @GET("search/multi")
     suspend fun performSearch(

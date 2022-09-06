@@ -105,6 +105,7 @@ class MediaDetailActivity : AppCompatActivity() {
             Log.e(DetailBottomSheet.TAG, "fetchData: $title", )
             if (id != 0){
                 viewModel.fetchTvDetails(id)
+
             }
 
         }else {
@@ -144,7 +145,6 @@ class MediaDetailActivity : AppCompatActivity() {
             details.title!!
         }else{
             details.name!!
-
         }
 
          binding.favorite.setOnClickListener {
@@ -198,11 +198,12 @@ class MediaDetailActivity : AppCompatActivity() {
             .into(img)
 
 
-        if(details.releaseDate == null){
-            binding.year.text = getReleaseYear(details.firstAirDate!!)
-        }else
-            binding.year.text = getReleaseYear(details.releaseDate!!)
-
+        if (details.releaseDate != null && details.releaseDate != "" || details.firstAirDate != null && details.firstAirDate != "") {
+            if (details.releaseDate == null) {
+                binding.year.text = getReleaseYear(details.firstAirDate!!)
+            } else
+                binding.year.text = getReleaseYear(details.releaseDate!!)
+        }
 
         val countries = StringBuilder()
         for (detail in details.productionCountries) {

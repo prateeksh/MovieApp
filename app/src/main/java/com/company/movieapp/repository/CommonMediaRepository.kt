@@ -3,10 +3,9 @@ package com.company.movieapp.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.*
 import com.company.movieapp.api.ApiService
-import com.company.movieapp.model.CommonData
 import com.company.movieapp.model.Media
 import com.company.movieapp.paging.*
-import com.company.movieapp.utils.NetworkUtils
+
 import javax.inject.Inject
 
 class CommonMediaRepository @Inject constructor(
@@ -41,14 +40,17 @@ class CommonMediaRepository @Inject constructor(
         return topRatedCommonData
     }
 
-    fun getPopularMoviesData(): LiveData<PagingData<Media>>? {
+    fun getPopularMoviesData(): LiveData<PagingData<Media>> {
 
+        if (popularCommonData != null){
+            return popularCommonData!!
+        }
         popularCommonData = Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {PopularMoviePagingSource(movieService)}
         ).liveData
 
-        return popularCommonData
+        return popularCommonData!!
     }
 
     fun getPopularTvData(): LiveData<PagingData<Media>>? {
@@ -86,9 +88,9 @@ class CommonMediaRepository @Inject constructor(
 
     suspend fun getTrendingMedia() = movieService.getTrending()
 
-    suspend fun getRecommendedTv(id: Int) = movieService.getRecommendedTv(id)
+    suspend fun getRecommendedTv(id: Int) = movieService.getSimilarTv(id)
 
-    suspend fun getRecommendedMovie(id: Int) = movieService.getRecommendedMovie(id)
+    suspend fun getRecommendedMovie(id: Int) = movieService.getSimilarMovie(id)
 
     suspend fun fetchPersonDetails(id: Int) = movieService.getPersonMovieDetail(id)
 

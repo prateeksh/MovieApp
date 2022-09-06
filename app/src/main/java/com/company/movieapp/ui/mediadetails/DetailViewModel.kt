@@ -44,6 +44,39 @@ class DetailViewModel(private val repository: CommonMediaRepository, private val
     }
 
 
+    val similarTv: MutableLiveData<Resource<Media>> =
+        MutableLiveData(Resource(false, null, null))
+
+    fun fetchSimilarTv(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            similarTv.postValue(similarTv.value!!.copy(isLoading = true))
+            try {
+                val response = repository.fetchTvDetails(id)
+                similarTv.postValue(similarTv.value!!.copy(isLoading = false, data = response))
+            } catch (e: Exception) {
+                similarTv.postValue(similarTv.value!!.copy(isLoading = false, error = e.message))
+            }
+        }
+    }
+
+
+
+    val similarMovie: MutableLiveData<Resource<Media>> =
+        MutableLiveData(Resource(false, null, null))
+
+    fun fetchSimilarMovie(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            similarMovie.postValue(similarMovie.value!!.copy(isLoading = true))
+            try {
+                val response = repository.fetchTvDetails(id)
+                similarMovie.postValue(similarMovie.value!!.copy(isLoading = false, data = response))
+            } catch (e: Exception) {
+                similarMovie.postValue(similarMovie.value!!.copy(isLoading = false, error = e.message))
+            }
+        }
+    }
+
+
     fun insertInDb(media: Media){
         viewModelScope.launch(Dispatchers.IO) {
             try {

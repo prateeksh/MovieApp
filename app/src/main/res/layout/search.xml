@@ -19,6 +19,7 @@
         android:padding="5dp"
         android:textSize="18sp"
         android:lines="1"
+        android:text="asjdghsakdhkasdkasjdgjksgdksgdskjahgd sjghdjagshdashgdjhagsdhgshjgsajfhgdsjafhgdksjd"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"

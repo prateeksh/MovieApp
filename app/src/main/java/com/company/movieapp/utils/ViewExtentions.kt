@@ -14,7 +14,7 @@ fun View.show(){
 
 fun getReleaseYear(yearRec: String): String? {
 
-    return if (yearRec == null) {
+    return if (yearRec == null && yearRec == "") {
         null
     } else {
         val format = SimpleDateFormat("yyyy-MM-dd")

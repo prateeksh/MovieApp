@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.MainApplication
-import com.company.movieapp.adapter.RecommendationAdapter
+import com.company.movieapp.adapter.SavedMoviesAdapter
 import com.company.movieapp.databinding.SavedMoviesFragmentBinding
 import com.company.movieapp.ui.home.HomeViewModel
 import com.company.movieapp.ui.home.HomeViewModelFactory
@@ -33,7 +33,7 @@ class SavedMoviesFragment : Fragment() {
     private lateinit var viewModel: SavedMoviesViewModel
     private lateinit var recyclerView: RecyclerView
 
-    private lateinit var adapter: RecommendationAdapter
+    private lateinit var adapter: SavedMoviesAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class SavedMoviesFragment : Fragment() {
         viewModel =
             ViewModelProvider(this, savedModelFactory).get(SavedMoviesViewModel::class.java)
 
-        recyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
         /*childAdapter = ChildAdapter()
         recyclerView.adapter = childAdapter*/
@@ -56,7 +56,7 @@ class SavedMoviesFragment : Fragment() {
 
         viewModel.saved.observe(viewLifecycleOwner, Observer {
             if(it!= null) {
-                adapter = RecommendationAdapter(it)
+                adapter = SavedMoviesAdapter(it)
                 recyclerView.adapter = adapter
             }else{
                 Toast.makeText(requireContext(),"No data in database",Toast.LENGTH_LONG).show()

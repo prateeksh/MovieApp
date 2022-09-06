@@ -12,6 +12,7 @@ import com.company.movieapp.MainApplication
 import com.company.movieapp.adapter.SearchAdapter
 import com.company.movieapp.adapter.SearchMovieViewAdapter
 import com.company.movieapp.databinding.ActivityPersonDetailsBinding
+import com.company.movieapp.ui.mediadetails.MediaDetailActivity
 import com.company.movieapp.utils.hide
 import com.company.movieapp.utils.show
 import javax.inject.Inject
@@ -82,9 +83,18 @@ class PersonDetailsActivity : AppCompatActivity() {
             }
         }
         viewModel.personResults.observe(this) {
-            Log.e(TAG, "setUpViewModel: ${it.id} ${it.cast.get(2).title}", )
-            searchAdapter = SearchMovieViewAdapter(it)
-            searchRecycler.adapter = searchAdapter
+            if(it != null) {
+                Log.e(TAG, "setUpViewModel: ${it.id}",)
+                searchAdapter = SearchMovieViewAdapter(it)
+                searchRecycler.adapter = searchAdapter
+
+                searchAdapter.onItemClick = { itemId: Int, itemTitle: String ->
+                    val intent = Intent(this, MediaDetailActivity::class.java)
+                    intent.putExtra("id", itemId)
+                    intent.putExtra("title", itemTitle)
+                    startActivity(intent)
+                }
+            }
         }
     }
 }

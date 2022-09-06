@@ -31,6 +31,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    private val homeFragment = HomeFragment()
+    private val savedMoviesFragment = SavedMoviesFragment()
+    private val fragmentManager = supportFragmentManager
+    private var activeFragment: Fragment = homeFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val splashScreen = installSplashScreen()
@@ -50,15 +55,36 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         var fragment = Fragment()
-       /* fragmentManager.beginTransaction().apply {
+
+    /* fragmentManager.beginTransaction().apply {
             add(R.id.nav_host_fragment_activity_main, homeFragment, "home_frag")
             add(R.id.nav_host_fragment_activity_main, savedMoviesFragment, "save_movies").hide(savedMoviesFragment)
-        }.commit()*/
+        }.commit()
 
         navView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.home_fragment -> {
+                    fragmentManager.beginTransaction().hide(activeFragment)
+                        .show(homeFragment).commit()
+                    homeFragment.onFirstDisplay()
+                    activeFragment = homeFragment
+                    true
+                }
+                R.id.saved_fragment -> {
+                    fragmentManager.beginTransaction().hide(activeFragment)
+                        .show(savedMoviesFragment).commit()
+                    activeFragment = savedMoviesFragment
+                    true
+                }
+                else -> false
+            }
+        }
+*/
+        navView.setOnItemSelectedListener {
+            when(it.itemId){
+                R.id.home_fragment -> {
                     fragment = HomeFragment()
+
                 }
                 R.id.saved_fragment -> {
                     fragment = SavedMoviesFragment()
@@ -74,19 +100,5 @@ class MainActivity : AppCompatActivity() {
         }
 
         navView.selectedItemId = R.id.home_fragment
-
-
-
-        /*val navController = binding.navHostFragmentActivityMain.getFragment<NavHostFragment>().navController
-        //val navController = findNavController(R.id.nav_host_fragment_activity_main)
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.home_fragment, R.id.saved_fragment
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)*/
     }
 }
