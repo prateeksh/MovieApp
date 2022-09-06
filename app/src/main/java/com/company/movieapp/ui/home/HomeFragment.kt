@@ -80,67 +80,18 @@ class HomeFragment : Fragment(), DataPassing {
         }
         else {
 
-            setupViewModel()
+
             Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
             binding.swipeToRefresh.isRefreshing = false
 
-            recyclerView.hide()
-            binding.loader.root.show()
+            setupViewModel()
+           /* recyclerView.hide()
+            binding.loader.root.show()*/
 
         }
 
     }
 
-    private fun setupViewPager(){
-
-        viewModel.getTrendingMedia()
-        viewModel.trendingMedia.observe(viewLifecycleOwner, Observer { trendingMedia ->
-            //setUpCustomSlidingViewPager(trendingMedia)
-        })
-    }
-
-
-   /* private fun setUpCustomSlidingViewPager(trendingMedia: ArrayList<Media>){
-
-       val mediaList = trendingMedia.subList(10,19)
-
-        slidingDotsCount = mediaList.size
-        val imagesArray = ArrayList<String>()
-
-        mediaList.forEach{
-            imagesArray.add(it.posterPath!!)
-        }
-
-        var currentPage = 0
-        val dotsIndicator = binding.dotsIndicator
-        val viewPager = binding.slidingViewPager
-        val adapter = SlidingImageAdapter(requireActivity(), imagesArray)
-        viewPager.adapter = adapter
-        dotsIndicator.attachTo(viewPager)
-
-        val zoomOutPageTransformer = PageTransformer()
-        viewPager.setPageTransformer { page, position ->
-            zoomOutPageTransformer.transformPage(page, position)
-        }
-
-        val handler = Handler()
-        val update = Runnable {
-            if (currentPage == imagesArray.size) {
-                currentPage = 0
-            }
-
-            viewPager.setCurrentItem(currentPage++, true)
-        }
-
-
-        Timer().schedule(object : TimerTask() {
-            // task to be scheduled
-            override fun run() {
-                handler.post(update)
-            }
-        }, 3500, 3500)
-
-    }*/
 
     override fun onResume() {
         super.onResume()
@@ -154,10 +105,6 @@ class HomeFragment : Fragment(), DataPassing {
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
 
-        val listOfFeedItems = ArrayList<PagingData<Media>>()
-        val feedItem = ArrayList<FeedItem>()
-
-
         recyclerView.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.VERTICAL, false
@@ -165,63 +112,75 @@ class HomeFragment : Fragment(), DataPassing {
 
         recyclerView.setHasFixedSize(true)
 
+       fetchDataFromViewModel()
 
-        viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+    }
 
-            if (movies != null) {
-                listOfFeedItems.add(movies)
-                feedItem.add(FeedItem("Popular Movies", listOfFeedItems))
-            }
 
-        })
-        viewModel.getTopRatedMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+    private fun fetchDataFromViewModel(){
+        try {
 
-            if (movies != null) {
-                listOfFeedItems.add(movies)
-                feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
-            }
+           /* recyclerView.show()
+            binding.loader.root.hide()*/
 
-        })
-        viewModel.getUpComingMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+            val listOfFeedItems = ArrayList<PagingData<Media>>()
+            val feedItem = ArrayList<FeedItem>()
 
-            if (movies!= null) {
-                listOfFeedItems.add(movies)
-                feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
-            }
-        })
 
-        viewModel.getPopularTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+            viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
-            if (tvShows != null) {
-                listOfFeedItems.add(tvShows)
-                feedItem.add(FeedItem("Popular Tv", listOfFeedItems))
+                if (movies != null) {
+                    listOfFeedItems.add(movies)
+                    feedItem.add(FeedItem("Popular Movies", listOfFeedItems))
+                }
 
-            }
-        })
+            })
+            viewModel.getTopRatedMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
-        viewModel.getTopRatedTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+                if (movies != null) {
+                    listOfFeedItems.add(movies)
+                    feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
+                }
 
-            if (tvShows != null) {
-                listOfFeedItems.add(tvShows)
-                feedItem.add(FeedItem("Top Rated Tv", listOfFeedItems))
-            }
-        })
+            })
+            viewModel.getUpComingMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
 
-        viewModel.getOnAirTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+                if (movies!= null) {
+                    listOfFeedItems.add(movies)
+                    feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
+                }
+            })
 
-            if (tvShows != null) {
-                listOfFeedItems.add(tvShows)
-                feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
-            }
+            viewModel.getPopularTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
 
-            recyclerView.show()
-            binding.loader.root.hide()
+                if (tvShows != null) {
+                    listOfFeedItems.add(tvShows)
+                    feedItem.add(FeedItem("Popular Tv", listOfFeedItems))
 
-            parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
-            recyclerView.adapter = parentAdapter
-        })
+                }
+            })
 
-        setupViewPager()
+            viewModel.getTopRatedTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+
+                if (tvShows != null) {
+                    listOfFeedItems.add(tvShows)
+                    feedItem.add(FeedItem("Top Rated Tv", listOfFeedItems))
+                }
+            })
+
+            viewModel.getOnAirTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+
+                if (tvShows != null) {
+                    listOfFeedItems.add(tvShows)
+                    feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
+                }
+
+                parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
+                recyclerView.adapter = parentAdapter
+            })
+        }catch (e1: Exception){
+            e1.printStackTrace()
+        }
     }
 
 
