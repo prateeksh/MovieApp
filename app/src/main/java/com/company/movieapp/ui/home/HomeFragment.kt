@@ -190,7 +190,6 @@ class HomeFragment : Fragment(), DataPassing {
                         listOfFeedItems.add(tvShows)
                         feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
 
-
                     parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
                     recyclerView.adapter = parentAdapter
                 }
