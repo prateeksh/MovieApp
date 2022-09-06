@@ -5,77 +5,75 @@ import androidx.paging.*
 import com.company.movieapp.api.ApiService
 import com.company.movieapp.model.Media
 import com.company.movieapp.paging.*
+import kotlinx.coroutines.flow.Flow
 
 import javax.inject.Inject
 
 class CommonMediaRepository @Inject constructor(
     private val movieService: ApiService
-    ) {
+) {
 
-    private var upcomingCommonData: LiveData<PagingData<Media>>? = null
-    private var popularCommonData:  LiveData<PagingData<Media>>? = null
-    private var topRatedCommonData:  LiveData<PagingData<Media>>? = null
-
-
-    private var popularTv: LiveData<PagingData<Media>>? = null
-    private var onAirTv: LiveData<PagingData<Media>>? = null
-    private var topRatedTv: LiveData<PagingData<Media>>? = null
+    private var upcomingCommonData: Flow<PagingData<Media>>? = null
+    private var popularCommonData:  Flow<PagingData<Media>>? = null
+    private var topRatedCommonData:  Flow<PagingData<Media>>? = null
 
 
-    fun getUpcomingMoviesData(): LiveData<PagingData<Media>>? {
+    private var popularTv: Flow<PagingData<Media>>? = null
+    private var onAirTv: Flow<PagingData<Media>>? = null
+    private var topRatedTv: Flow<PagingData<Media>>? = null
+
+
+    fun getUpcomingMoviesData(): Flow<PagingData<Media>>? {
         upcomingCommonData = Pager(
-                config = PagingConfig(pageSize = 20, maxSize = 100),
-                pagingSourceFactory = {UpcomingMoviePagingSource(movieService)}
-            ).liveData
+            config = PagingConfig(pageSize = 20, maxSize = 100),
+            pagingSourceFactory = {UpcomingMoviePagingSource(movieService)}
+        ).flow
 
         return upcomingCommonData
     }
 
-    fun getTopRatedMoviesData(): LiveData<PagingData<Media>>? {
+    fun getTopRatedMoviesData(): Flow<PagingData<Media>>? {
         topRatedCommonData = Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {TopRatedMoviePagingSource(movieService)}
-        ).liveData
+        ).flow
 
         return topRatedCommonData
     }
 
-    fun getPopularMoviesData(): LiveData<PagingData<Media>> {
+    fun getPopularMoviesData(): Flow<PagingData<Media>>? {
 
-        if (popularCommonData != null){
-            return popularCommonData!!
-        }
         popularCommonData = Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {PopularMoviePagingSource(movieService)}
-        ).liveData
+        ).flow
 
-        return popularCommonData!!
+        return popularCommonData
     }
 
-    fun getPopularTvData(): LiveData<PagingData<Media>>? {
+    fun getPopularTvData(): Flow<PagingData<Media>>? {
         popularTv =  Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {PopularTvPagingSource(movieService)}
-        ).liveData
+        ).flow
 
         return popularTv
     }
 
-    fun getOnAirData(): LiveData<PagingData<Media>>? {
+    fun getOnAirData(): Flow<PagingData<Media>>? {
         onAirTv = Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {OnAirTvPagingSource(movieService)}
-        ).liveData
+        ).flow
 
         return onAirTv
     }
 
-    fun getTopRatedTvData(): LiveData<PagingData<Media>>? {
+    fun getTopRatedTvData(): Flow<PagingData<Media>>? {
         topRatedTv = Pager(
             config = PagingConfig(pageSize = 20, maxSize = 100),
             pagingSourceFactory = {TopRatedTvPagingSource(movieService)}
-        ).liveData
+        ).flow
 
         return topRatedTv
     }

@@ -46,6 +46,7 @@ class HomeFragment : Fragment(), DataPassing {
     private var slidingDotsCount = 0
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,24 +54,20 @@ class HomeFragment : Fragment(), DataPassing {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        recyclerView = binding.feedsList
-
-
-        if (savedInstanceState == null) {
-            checkAndInitializeViewModel()
-
-        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        recyclerView = binding.feedsList
+
         binding.swipeToRefresh.setOnRefreshListener {
             checkAndInitializeViewModel()
         }
-
-
+        if(savedInstanceState == null) {
+            checkAndInitializeViewModel()
+        }
 
         binding.searchIcon.setOnClickListener {
             val intent = Intent(requireActivity(), SearchableActivity::class.java)
@@ -78,13 +75,14 @@ class HomeFragment : Fragment(), DataPassing {
         }
     }
 
-    private fun checkAndInitializeViewModel() {
+    private fun checkAndInitializeViewModel(){
 
         if (!NetworkUtils.isNetworkAvailable(requireContext())) {
             Toast.makeText(requireContext(), "NO Internet", Toast.LENGTH_SHORT).show()
             binding.loader.root.hide()
             binding.swipeToRefresh.isRefreshing = false
-        } else {
+        }
+        else {
 
 
             Toast.makeText(requireContext(), " Internet Available", Toast.LENGTH_SHORT).show()
@@ -98,14 +96,18 @@ class HomeFragment : Fragment(), DataPassing {
 
     }
 
-    private fun setupViewModel() {
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    private fun setupViewModel(){
 
 
         (requireActivity().application as MainApplication).applicationComponent.inject(this@HomeFragment)
 
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
-
 
         recyclerView.layoutManager = LinearLayoutManager(
             requireContext(),
@@ -119,71 +121,85 @@ class HomeFragment : Fragment(), DataPassing {
     }
 
 
-    /*fun onFirstDisplay(){
-       fetchDataFromViewModel()
-   }*/
-
-
-    private fun fetchDataFromViewModel() {
-        val listOfFeedItems = ArrayList<PagingData<Media>>()
-        val feedItem = ArrayList<FeedItem>()
+    private fun fetchDataFromViewModel(){
         try {
 
-            viewModel.getPopularMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+            /* recyclerView.show()
+             binding.loader.root.hide()*/
 
-                if (movies != null) {
-                    listOfFeedItems.add(movies)
-                    feedItem.add(FeedItem("Popular Movies", listOfFeedItems))
-                }
+            val listOfFeedItems = ArrayList<PagingData<Media>>()
+            val feedItem = ArrayList<FeedItem>()
 
-            })
-            viewModel.getTopRatedMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+            lifecycleScope.launchWhenCreated {
+                viewModel.getPopularMovies().collectLatest { movies ->
 
-                if (movies != null) {
-                    listOfFeedItems.add(movies)
-                    feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
-                }
 
-            })
-            viewModel.getUpComingMovies()!!.observe(viewLifecycleOwner, Observer { movies ->
+                        listOfFeedItems.add(movies)
+                        feedItem.add(FeedItem("Popular Movies", listOfFeedItems))
 
-                if (movies != null) {
-                    listOfFeedItems.add(movies)
-                    feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
-                }
-            })
-
-            viewModel.getPopularTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
-
-                if (tvShows != null) {
-                    listOfFeedItems.add(tvShows)
-                    feedItem.add(FeedItem("Popular Tv", listOfFeedItems))
 
                 }
-            })
+            }
 
-            viewModel.getTopRatedTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
+            lifecycleScope.launchWhenCreated {
+                viewModel.getTopRatedMovies()!!.collectLatest { movies ->
 
-                if (tvShows != null) {
-                    listOfFeedItems.add(tvShows)
-                    feedItem.add(FeedItem("Top Rated Tv", listOfFeedItems))
+
+                        listOfFeedItems.add(movies)
+                        feedItem.add(FeedItem("Top Rated Movies", listOfFeedItems))
+
+
                 }
-            })
+            }
+            lifecycleScope.launchWhenCreated {
+                viewModel.getUpComingMovies()!!.collectLatest { movies ->
 
-            viewModel.getOnAirTv()!!.observe(viewLifecycleOwner, Observer { tvShows ->
 
-                if (tvShows != null) {
-                    listOfFeedItems.add(tvShows)
-                    feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
+                        listOfFeedItems.add(movies)
+                        feedItem.add(FeedItem("Upcoming Movies", listOfFeedItems))
+
                 }
+            }
+            lifecycleScope.launchWhenCreated {
+                viewModel.getPopularTv()!!.collectLatest { tvShows ->
 
-                parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
-                recyclerView.adapter = parentAdapter
-            })
-        } catch (e1: Exception) {
+
+                        listOfFeedItems.add(tvShows)
+                        feedItem.add(FeedItem("Popular Tv", listOfFeedItems))
+
+
+                }
+            }
+
+
+            lifecycleScope.launchWhenCreated {
+                viewModel.getTopRatedTv()!!.collectLatest { tvShows ->
+
+
+                        listOfFeedItems.add(tvShows)
+                        feedItem.add(FeedItem("Top Rated Tv", listOfFeedItems))
+
+                }
+            }
+
+
+            lifecycleScope.launchWhenCreated {
+                viewModel.getOnAirTv()!!.collectLatest { tvShows ->
+
+
+                        listOfFeedItems.add(tvShows)
+                        feedItem.add(FeedItem("On Air Tv", listOfFeedItems))
+
+
+                    parentAdapter = ParentAdapter(feedItem, lifecycle, this@HomeFragment)
+                    recyclerView.adapter = parentAdapter
+                }
+            }
+            }catch (e1: Exception){
             e1.printStackTrace()
         }
     }
+
 
     override fun getId(id: Int, title: String) {
 
@@ -196,19 +212,11 @@ class HomeFragment : Fragment(), DataPassing {
     }
 
     override fun getIdOnClick(id: Int, title: String) {
-        val intent = Intent(requireActivity(), MediaDetailActivity::class.java)
+        val intent = Intent(requireActivity(),MediaDetailActivity::class.java)
         intent.putExtra("id", id)
         intent.putExtra("title", title)
         startActivity(intent)
     }
-
-    override fun onResume() {
-        super.onResume()
-        recyclerView.invalidate()
-
-        Log.e(TAG, "onResume: called")
-    }
-
 
     override fun onDestroyView() {
 

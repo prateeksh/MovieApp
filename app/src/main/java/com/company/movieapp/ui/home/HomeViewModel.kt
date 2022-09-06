@@ -12,27 +12,27 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val repository: CommonMediaRepository) : ViewModel() {
 
-    fun getPopularMovies() : LiveData<PagingData<Media>>? {
-        return repository.getPopularMoviesData()?.cachedIn(viewModelScope)
+    fun getPopularMovies() : Flow<PagingData<Media>> {
+        return repository.getPopularMoviesData()!!.cachedIn(viewModelScope)
     }
 
-    fun getTopRatedMovies() : LiveData<PagingData<Media>>? {
+    fun getTopRatedMovies() : Flow<PagingData<Media>>? {
         return repository.getTopRatedMoviesData()?.cachedIn(viewModelScope)
     }
 
-    fun getUpComingMovies() : LiveData<PagingData<Media>>? {
+    fun getUpComingMovies() : Flow<PagingData<Media>>? {
         return repository.getUpcomingMoviesData()?.cachedIn(viewModelScope)
     }
 
-    fun getPopularTv() : LiveData<PagingData<Media>>? {
+    fun getPopularTv() : Flow<PagingData<Media>>? {
         return repository.getPopularTvData()?.cachedIn(viewModelScope)
     }
 
-    fun getTopRatedTv() : LiveData<PagingData<Media>>? {
+    fun getTopRatedTv() : Flow<PagingData<Media>>? {
         return repository.getTopRatedTvData()?.cachedIn(viewModelScope)
     }
 
-    fun getOnAirTv() : LiveData<PagingData<Media>>? {
+    fun getOnAirTv() : Flow<PagingData<Media>>? {
         return repository.getOnAirData()?.cachedIn(viewModelScope)
     }
     val trendingMedia: MutableLiveData<ArrayList<Media>> = MutableLiveData()
