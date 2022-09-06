@@ -23,8 +23,6 @@ class CommonMediaRepository @Inject constructor(
     private var topRatedTv: LiveData<PagingData<Media>>? = null
 
 
-    private var trendingData: LiveData<CommonData<Media>>? = null
-
     fun getUpcomingMoviesData(): LiveData<PagingData<Media>>? {
         upcomingCommonData = Pager(
                 config = PagingConfig(pageSize = 20, maxSize = 100),

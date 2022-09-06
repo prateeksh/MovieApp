@@ -56,14 +56,6 @@ class PersonDetailsActivity : AppCompatActivity() {
     private fun setupUI() {
         binding.toolbarPerson.setNavigationOnClickListener { finish() }
 
-        /*binding.searchTextInput.addTextChangedListener {
-            *//*val query = it.toString().trim()
-            if (query.isNotEmpty()) {
-                viewModel.fetchSearchResults(query)
-            }*//*
-            updateUI()
-        }*/
-
         if (id != 0){
             viewModel.fetchPersonResults(id)
             Log.e(TAG, "setupUI: $id", )
@@ -90,7 +82,7 @@ class PersonDetailsActivity : AppCompatActivity() {
             }
         }
         viewModel.personResults.observe(this) {
-            Log.e(TAG, "setUpViewModel: ${it.id}", )
+            Log.e(TAG, "setUpViewModel: ${it.id} ${it.cast.get(2).title}", )
             searchAdapter = SearchMovieViewAdapter(it)
             searchRecycler.adapter = searchAdapter
         }

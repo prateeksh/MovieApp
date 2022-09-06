@@ -96,10 +96,10 @@ class SearchableActivity: AppCompatActivity() {
                 }else{
 
                     //move to person detail activity
-                    /*val intent = Intent(this, PersonDetailsActivity::class.java)
+                    val intent = Intent(this, PersonDetailsActivity::class.java)
                     intent.putExtra("id", id)
                     intent.putExtra("title", title)
-                    startActivity(intent)*/
+                    startActivity(intent)
 
                 }
             }

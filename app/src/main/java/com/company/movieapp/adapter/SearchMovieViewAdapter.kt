@@ -71,8 +71,10 @@ open class SearchMovieViewAdapter(var memberData: Person) : RecyclerView.Adapter
 
         holder.title.text = list.title
         holder.rating.rating = convertRatings(list.voteAverage!!)
-        holder.year.text = getReleaseYear(list.releaseDate.toString())
-
+       /* if (list.releaseDate != null) {
+            Log.e("TAG", "onBindViewHolder: ${list.releaseDate}", )
+            holder.year.text = getReleaseYear(list.releaseDate.toString())
+        }*/
     }
 
     override fun getItemCount(): Int = memberData.cast.size

@@ -43,8 +43,6 @@ interface ApiService {
     suspend fun getOnAirTv(@Query("page") page: Int): CommonData<Media>
 
 
-
-
     @GET("tv/{id}")
     suspend fun getTvDetails(@Path("id") id: Int) : Media
 
@@ -59,6 +57,6 @@ interface ApiService {
     @GET("trending/all/week")
     suspend fun getTrending() : CommonData<Media>
 
-    @GET("person/{id}")
+    @GET("person/{id}/movie_credits")
     suspend fun getPersonMovieDetail(@Path("id") id:Int): Person
 }

@@ -6,8 +6,7 @@
     android:id="@+id/swipe_to_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment"
-    android:background="@color/black">
+    tools:context=".ui.home.HomeFragment">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -28,7 +27,8 @@
                 android:orientation="vertical"
                 android:id="@+id/container_home"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                >
 
 
                 <com.google.android.material.appbar.AppBarLayout
@@ -73,31 +73,6 @@
 
                 </com.google.android.material.appbar.AppBarLayout>
 
-                <FrameLayout
-                    android:id="@+id/pager_container"
-                    app:layout_constraintTop_toBottomOf="@id/app_bar_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <androidx.viewpager2.widget.ViewPager2
-                        android:id="@+id/slidingViewPager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-
-                    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-                        android:id="@+id/dots_indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:dotsColor="@color/lightGrey"
-                        app:dotsCornerRadius="8dp"
-                        app:dotsSize="16dp"
-                        app:dotsSpacing="4dp"
-                        app:dotsWidthFactor="2.5"
-                        android:layout_gravity="center_horizontal|bottom"
-                        app:selectedDotColor="@color/primary_color"
-                        app:progressMode="true" />
-                </FrameLayout>
-
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/feeds_list"
@@ -109,7 +84,6 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/pager_container"
                     app:layout_constraintVertical_bias="1.0" />
 
 

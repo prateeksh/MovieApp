@@ -1,21 +1,17 @@
 package com.company.movieapp.di
 
-import android.content.Context
-import android.content.res.Resources
-import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import com.company.movieapp.BuildConfig
-import com.company.movieapp.R
 import com.company.movieapp.api.ApiService
-import com.company.movieapp.model.Media
 import com.company.movieapp.utils.Constants
 import dagger.Module
 import dagger.Provides
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import javax.inject.Singleton
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+import javax.inject.Singleton
 
 
 @Module
@@ -38,30 +34,44 @@ class NetworkModules {
         return retrofit.create(ApiService::class.java)
     }
 
-   /* private val moshi: Moshi = Moshi.Builder()
-        .add(
-            PolymorphicJsonAdapterFactory.of(Media::class.java,"media_type")
-                .withSubtype(Media.Movies::class.java, "movies")
-                .withSubtype(Media.TvShows::class.java, "tv")
-        )
-        .add(KotlinJsonAdapterFactory())
-        .build()*/
-
-
 
     private fun getClient(addApiKey: Boolean): OkHttpClient {
         val builder = OkHttpClient.Builder()
         if (addApiKey) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
             builder.addInterceptor { chain ->
                 var request = chain.request()
                 val url = request.url().newBuilder().addQueryParameter(
-                    "api_key",
-                    BuildConfig.API_KEY
+                    "api_key", BuildConfig.API_KEY
                 ).build()
                 request = request.newBuilder().url(url).build()
                 chain.proceed(request)
             }
         }
+        builder.readTimeout(10, TimeUnit.SECONDS)
+        builder.connectTimeout(5, TimeUnit.SECONDS)
+
+        if (BuildConfig.DEBUG) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BASIC
+            builder.addInterceptor(interceptor)
+        }
+
+        builder.addNetworkInterceptor { chain: Interceptor.Chain ->
+            val request = chain.request().newBuilder().addHeader("Content-Type", "application/json").build()
+            chain.proceed(request)
+        }
+
+
         return builder.build()
     }
+
+
+/*
+    fun gfgHttpClient(): OkHttpClient {
+        val builder = OkHttpClient().newBuilder()
+            .addInterceptor(*//*our interceptor*//*)
+        return builder.build()
+    }*/
 }
