@@ -6,7 +6,7 @@
     <data>
         <variable
             name="cast"
-            type="com.company.movieapp.model.subdataclass.Cast" />
+            type="com.company.movieapp.model.Media" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -48,7 +48,7 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:padding="5dp"
-                android:text="@{cast.title}"
+                android:text="@{cast.title != null ? cast.title : cast.name }"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -66,7 +66,7 @@
 
             <TextView
                 android:id="@+id/year_mov"
-                app:setYear="@{cast.releaseDate}"
+                app:setYear="@{cast.releaseDate != null ? cast.releaseDate : cast.firstAirDate}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"

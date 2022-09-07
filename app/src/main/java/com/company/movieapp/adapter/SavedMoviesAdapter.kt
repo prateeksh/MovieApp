@@ -6,9 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.R
+import com.company.movieapp.databinding.MoviesInfoBinding
+import com.company.movieapp.databinding.SavedMoviesAdapterBinding
 import com.company.movieapp.model.Media
+import com.company.movieapp.model.subdataclass.Cast
 import com.company.movieapp.utils.Constants
 import com.company.movieapp.utils.getReleaseYear
 import com.squareup.picasso.Picasso
@@ -17,7 +21,7 @@ import com.squareup.picasso.Picasso
 open class SavedMoviesAdapter(memberData: List<Media>) : RecyclerView.Adapter<SavedMoviesAdapter.DataViewHolder>() {
 
     private var moviesList: List<Media> = ArrayList()
-
+    private lateinit var binding: SavedMoviesAdapterBinding
     init {
 
         this.moviesList = memberData
@@ -25,7 +29,7 @@ open class SavedMoviesAdapter(memberData: List<Media>) : RecyclerView.Adapter<Sa
 
     var onItemClick: ((Int, String) -> Unit)? = null
 
-    inner class DataViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class DataViewHolder(val binding: SavedMoviesAdapterBinding) : RecyclerView.ViewHolder(binding.root) {
         /*init {
             itemView.setOnClickListener {
                 if (moviesList[adapterPosition].originalTitle != null) {
@@ -43,19 +47,17 @@ open class SavedMoviesAdapter(memberData: List<Media>) : RecyclerView.Adapter<Sa
             }
         }*/
 
-        val moviePoster : ImageView = itemView.findViewById(R.id.movie_img)
-        val movieTitle: TextView = itemView.findViewById(R.id.movie_title)
-        val movieRating: TextView = itemView.findViewById(R.id.ratings_movie)
-        val movieYear: TextView = itemView.findViewById(R.id.year_mov)
+        fun bind(person: Media){
+            binding.cast = person
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder{
 
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.movies_info, parent,
+       binding = SavedMoviesAdapterBinding.inflate(LayoutInflater.from(parent.context), parent,
             false)
 
-        return DataViewHolder(view)
+        return DataViewHolder(binding)
     }
 
 
@@ -64,32 +66,32 @@ open class SavedMoviesAdapter(memberData: List<Media>) : RecyclerView.Adapter<Sa
 
         val uri = Constants.IMAGE_URL
         val  list = moviesList[position]
-        Picasso
-            .get()
-            .load(uri + list.posterPath)
-            .fit()
-            .into(holder.moviePoster)
-
-        val titleText: String = if (list.title != null){
-            list.title!!
-        }else{
-            list.name!!
-
-        }
-
-        holder.movieTitle.text = titleText
-        holder.movieRating.text = list.voteAverage.toString()
-
-        if (list.releaseDate != null) {
-            if (list.releaseDate != null && list.releaseDate != "") {
-                holder.movieYear.text = getReleaseYear(list.releaseDate.toString())
-            }
-        }else{
-            holder.movieYear.text = getReleaseYear(list.firstAirDate.toString())
-        }
+        holder.bind(list)
     }
 
     override fun getItemCount(): Int = moviesList.size
 
+    object DataBinding{
 
+        @BindingAdapter("setImage")
+        @JvmStatic
+        fun bindImage(view: ImageView, url: String?){
+            val uri = Constants.IMAGE_URL
+            Picasso
+                .get()
+                .load(uri + url)
+                .fit()
+                .into(view)
+
+        }
+
+        @BindingAdapter("setYear")
+        @JvmStatic
+        fun bindYear(view: TextView, year: String?){
+            if (year != null && year != "") {
+                view.text = getReleaseYear(year)
+            }
+        }
+
+    }
 }

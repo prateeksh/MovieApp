@@ -3,16 +3,23 @@ package com.company.movieapp.ui.mediadetails
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
+import android.widget.RatingBar
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.company.movieapp.MainApplication
 import com.company.movieapp.R
 import com.company.movieapp.databinding.ActivityMediaDetailBinding
 import com.company.movieapp.model.Media
+import com.company.movieapp.model.subdataclass.Genres
 import com.company.movieapp.utils.*
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.textview.MaterialTextView
 import com.squareup.picasso.Picasso
 import javax.inject.Inject
 
@@ -37,8 +44,8 @@ class MediaDetailActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
 
-        binding = ActivityMediaDetailBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_media_detail)
+        //setContentView(binding.root)
        // supportActionBar?.hide()
 
         if (savedInstanceState == null){
@@ -141,6 +148,7 @@ class MediaDetailActivity : AppCompatActivity() {
 
     private fun showDetailsDialog(details: Media){
 
+        Log.e(TAG, "showDetailsDialog: $details", )
         val titleText: String = if (details.title != null){
             details.title!!
         }else{
@@ -165,11 +173,7 @@ class MediaDetailActivity : AppCompatActivity() {
          }
 
 
-        val img = binding.imageView
-        val ratings = binding.ratingBar
-        val description = binding.overview
-
-
+        binding.media = details
 
         Log.e(DetailBottomSheet.TAG, "showDetailsDialog: $titleText", )
         var isShow = true
@@ -188,50 +192,72 @@ class MediaDetailActivity : AppCompatActivity() {
             }
         })
 
-        ratings.rating = convertRatings(details.voteAverage!!)
-        description.text = details.overview
-
-        Picasso
-            .get()
-            .load(Constants.DETAIL_IMAGE_URL + details.posterPath)
-            .fit()
-            .into(img)
-
-
-        if (details.releaseDate != null && details.releaseDate != "" || details.firstAirDate != null && details.firstAirDate != "") {
-            if (details.releaseDate == null) {
-                binding.year.text = getReleaseYear(details.firstAirDate!!)
-            } else
-                binding.year.text = getReleaseYear(details.releaseDate!!)
-        }
-
-        val countries = StringBuilder()
-        for (detail in details.productionCountries) {
-            countries.append(detail.iso31661).append(" ")
-        }
-
-        binding.country.text = countries
-
-        val genres: ArrayList<Int> = arrayListOf()
-        for (data in details.genres){
-            genres.add(data.id!!)
-        }
-        binding.geners.text = getGenresText(genres)
-
-        if (details.runTime == null ){
-            val appendSeasonsInfo = StringBuilder()
-            //binding!!.length.text = "Seasons"
-            binding.lengthMovie.text = appendSeasonsInfo.append(details.numberOfSeasons.toString()).append(" ").append("Season")
-        }else{
-
-            val appendMinutes = StringBuilder()
-            binding.lengthMovie.text = appendMinutes.append(details.runTime).append(" ").append("minutes")
-        }
     }
 
-    private fun convertRatings(ratings: Double): Float{
+    object DataBinding {
+        @BindingAdapter("imageUrl")
+        @JvmStatic
+        fun loadImage(view: ImageView, url: String?) {
+            Picasso
+                .get()
+                .load(Constants.IMAGE_URL + url)
+                .fit()
+                .into(view)
+        }
 
-        val rate = ratings/2
-        return rate.toFloat()
+        @BindingAdapter("genresInfo")
+        @JvmStatic
+        fun loadGenres(view: MaterialTextView, genresGet: ArrayList<Genres>?) {
+            Log.e(TAG, "loadGenres: $genresGet", )
+            if (genresGet != null) {
+                val genres: ArrayList<Int> = arrayListOf()
+                for (data in genresGet) {
+                    genres.add(data.id!!)
+                }
+                view.text = getGenresText(genres)
+            }
+        }
+
+        @BindingAdapter("movieLength")
+        @JvmStatic
+        fun loadLength(view: TextView, length: Int?) {
+
+            Log.e(TAG, "loadLength: $length", )
+            if (length != null) {
+                val appendSeasonsInfo = StringBuilder()
+
+                view.text = appendSeasonsInfo.append(length).append(" ").append("minutes")
+            }
+        }
+
+        @BindingAdapter("movieYear")
+        @JvmStatic
+        fun loadYear(view: TextView, year: String?) {
+
+            if (year != null) {
+                 view.text = getReleaseYear(year)
+            }
+        }
+
+        @BindingAdapter("country")
+        @JvmStatic
+        fun loadCountries(view: TextView, countriesGet: ArrayList<String>?) {
+            val countries = StringBuilder()
+            if (countriesGet != null) {
+                for (detail in countriesGet!!) {
+                    countries.append(detail).append(" ")
+                }
+                view.text = countries
+            }
+        }
+
+        @BindingAdapter("ratingApply")
+        @JvmStatic
+        fun loadRating(view: RatingBar, rating: Double?) {
+
+            if (rating != null) {
+                view.rating = convertRatings(rating)
+            }
+        }
     }
 }

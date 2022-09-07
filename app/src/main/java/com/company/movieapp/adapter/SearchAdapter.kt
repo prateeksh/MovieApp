@@ -37,15 +37,7 @@ class SearchAdapter(private var list: List<Media>) :
     inner class ViewHolder(private var item: SearchBinding) : RecyclerView.ViewHolder(item.root) {
         fun bind(details: Media) {
 
-
-            val titleText: String = if (details.title != null) {
-                details.title!!
-            } else {
-                details.name!!
-
-            }
-
-            item.name.text = titleText
+            item.search = details
 
             itemView.setOnClickListener {
                 if(details.mediaType == Constants.MOVIE) {

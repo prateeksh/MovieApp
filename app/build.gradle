@@ -44,6 +44,12 @@ android {
                 '-Xjvm-default=enable'
         ]
     }
+
+    android {
+
+        dataBinding.enabled = true
+
+    }
 }
 
 dependencies {

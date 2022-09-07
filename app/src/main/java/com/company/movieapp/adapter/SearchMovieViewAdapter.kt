@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.R
+import com.company.movieapp.databinding.MoviesInfoBinding
 import com.company.movieapp.model.Media
 import com.company.movieapp.model.Person
+import com.company.movieapp.model.subdataclass.Cast
 import com.company.movieapp.utils.Constants
 import com.company.movieapp.utils.convertRatings
 import com.company.movieapp.utils.getReleaseYear
@@ -20,43 +23,29 @@ import com.squareup.picasso.Picasso
 open class SearchMovieViewAdapter(var memberData: Person) : RecyclerView.Adapter<SearchMovieViewAdapter.SearchMovieViewHolder>() {
 
     var onItemClick: ((Int, String) -> Unit)? = null
+    lateinit var binding: MoviesInfoBinding
 
-    class SearchMovieViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+     inner class SearchMovieViewHolder(var binding: MoviesInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val moviePoster : ImageView = itemView.findViewById(R.id.movie_img)
-        val title : TextView = itemView.findViewById(R.id.movie_title)
-        val rating: TextView = itemView.findViewById(R.id.ratings_movie)
-        val year : TextView = itemView.findViewById(R.id.year_mov)
+         fun bind(person: Cast){
+            binding.cast = person
+         }
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchMovieViewHolder{
         Log.e("TAG", "onCreateViewHolder:  adapter", )
-        val view = LayoutInflater.from(parent.context).inflate(
-            R.layout.movies_info, parent,
-            false)
+        binding = MoviesInfoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return SearchMovieViewHolder(view)
+        return SearchMovieViewHolder(binding)
     }
 
 
     override fun onBindViewHolder(holder: SearchMovieViewHolder, position: Int) {
 
-        Log.e("TAG", "onBindViewHolder:  adapter", )
         val list = memberData.cast[position]
-        val uri = Constants.IMAGE_URL
-        Picasso
-            .get()
-            .load(uri + list.posterPath)
-            .fit()
-            .into(holder.moviePoster)
+        holder.bind(list)
 
-        holder.title.text = list.title
-        holder.rating.text = list.voteAverage.toString()
-        if (list.releaseDate != null && list.releaseDate != "") {
-            Log.e("TAG", "onBindViewHolder: ${list.releaseDate}", )
-            holder.year.text = getReleaseYear(list.releaseDate.toString())
-        }
 
         holder.itemView.setOnClickListener {
             if (list.originalTitle != null) {
@@ -72,6 +61,30 @@ open class SearchMovieViewAdapter(var memberData: Person) : RecyclerView.Adapter
                 )
             }
         }
+    }
+
+    object DataBinding{
+
+        @BindingAdapter("setImage")
+        @JvmStatic
+        fun bindImage(view: ImageView, url: String?){
+            val uri = Constants.IMAGE_URL
+            Picasso
+                .get()
+                .load(uri + url)
+                .fit()
+                .into(view)
+
+        }
+
+        @BindingAdapter("setYear")
+        @JvmStatic
+        fun bindYear(view: TextView, year: String?){
+            if (year != null && year != "") {
+                view.text = getReleaseYear(year)
+            }
+        }
+
     }
 
     override fun getItemCount(): Int = memberData.cast.size

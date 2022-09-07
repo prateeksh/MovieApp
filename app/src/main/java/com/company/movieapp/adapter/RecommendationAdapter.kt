@@ -41,7 +41,7 @@ open class RecommendationAdapter(memberData: List<Media>) : RecyclerView.Adapter
             }
         }*/
 
-        val moviePoster : ImageView = itemView.findViewById(R.id.movie_poster)
+       // val moviePoster : ImageView = itemView.findViewById(R.id.movie_poster)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataViewHolder{
@@ -58,11 +58,11 @@ open class RecommendationAdapter(memberData: List<Media>) : RecyclerView.Adapter
 
         Log.e("TAG", "onBindViewHolder: Recomend adapter", )
         val uri = Constants.IMAGE_URL
-        Picasso
+       /* Picasso
             .get()
             .load(uri + moviesList[position].posterPath)
             .fit()
-            .into(holder.moviePoster)
+            .into(holder.moviePoster)*/
 
     }
 

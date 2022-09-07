@@ -5,10 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.databinding.BindingAdapter
+import androidx.databinding.DataBindingUtil
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.company.movieapp.R
+import com.company.movieapp.databinding.MoviesViewLayoutBinding
+import com.company.movieapp.databinding.SearchBinding
 import com.company.movieapp.model.Media
 import com.company.movieapp.utils.Constants
 import com.squareup.picasso.Picasso
@@ -19,6 +23,7 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
 
     //private var moviesList: List<Movies> = ArrayList()
 
+    private lateinit var binding: MoviesViewLayoutBinding
 
     var onItemClick: ((Int, String) -> Unit)? = null
     var onClick: ((Int, String) -> Unit)? = null
@@ -28,27 +33,17 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChildViewHolder {
 
-        val view = LayoutInflater.from(parent.context)
-            .inflate(
-                R.layout.movies_view_layout,
-                parent, false
-            )
+       binding = MoviesViewLayoutBinding.inflate(LayoutInflater.from(parent.context),
+       parent, false)
 
-        return ChildViewHolder(view)
+        return ChildViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ChildViewHolder, position: Int) {
 
         media = getItem(position)!!
         getItemId(position)
-
-        val uri = Constants.IMAGE_URL
-        Picasso
-            .get()
-            .load(uri + media!!.posterPath)
-            .fit()
-            .into(holder.moviePoster)
-
+        holder.bind(media!!)
 
         holder.itemView.setOnLongClickListener {
 
@@ -99,32 +94,26 @@ class ChildAdapter : PagingDataAdapter<Media, ChildAdapter.ChildViewHolder>(Diff
 
     }
 
+    object BindAdapter {
 
-    inner class ChildViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        @BindingAdapter("setImage")
+        @JvmStatic
+        fun bindImage(view: ImageView, img: String?){
+            val uri = Constants.IMAGE_URL
+            Picasso
+                .get()
+                .load(uri + img)
+                .fit()
+                .into(view)
 
-        init {
-            /*itemView.setOnLongClickListener {
-                if (media!!.originalTitle != null) {
-
-                    onItemClick?.invoke(
-                        media!!.id!!,
-                        Constants.MOVIE
-                    )
-                    Log.e(TAG, "id generated : ${media!!.id} ${media!!.originalTitle}", )
-                } else {
-                    onItemClick?.invoke(
-                        media!!.id!!,
-                        Constants.TV
-                    )
-
-                    Log.e(TAG, "id generated : ${media!!.id}", )
-                }
-
-                return@setOnLongClickListener true
-            }*/
         }
+    }
 
-        val moviePoster: ImageView = itemView.findViewById(R.id.movie_poster)
+    class ChildViewHolder(val binding: MoviesViewLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        fun bind (media: Media){
+            binding.media = media
+        }
     }
 
 
