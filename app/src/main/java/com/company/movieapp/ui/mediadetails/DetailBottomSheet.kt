@@ -60,20 +60,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
     }
 
-   
-
-
- /*   private fun insertToDb(media: Media){
-        CoroutineScope(Dispatchers.IO).launch {
-            if (database.mediaDao().count(media.id.toString()) == 1) {
-                Toast.makeText(requireContext(), "already in db",Toast.LENGTH_LONG).show()
-            } else {
-                database.mediaDao().insertMedia(media)
-            }
-        }
-        binding!!.favorite.setImageDrawable(ResourcesCompat.getDrawable(resources,R.drawable.heart_24,null))
-    }*/
-
     private fun setUpViewModel(){
         viewModel =
             ViewModelProvider(this, viewModelFactory).get(DetailViewModel::class.java)
@@ -103,31 +89,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
 
         }
-        /*viewModel.checkDbForData(id!!)
-
-        viewModel.dataExits.observe(viewLifecycleOwner, Observer {
-
-            Log.e(TAG, "setUpViewModel: $it", )
-
-            if (it){
-                binding!!.favorite.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.heart_24,
-                        null
-                    )
-                )
-            }else{
-                binding!!.favorite.setImageDrawable(
-                    ResourcesCompat.getDrawable(
-                        resources,
-                        R.drawable.heart_outline,
-                        null
-                    )
-                )
-            }
-        })*/
-
     }
 
 
@@ -156,18 +117,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
-     private fun checkDb(): Boolean{
-
-         var returnType: Boolean? = null
-         viewModel.dataExits.observe(viewLifecycleOwner, Observer {
-
-             returnType = it
-             Log.e(TAG, "checkDb: $it", )
-
-         })
-       return returnType!!
-    }
-
 
     private fun showDetailsDialog(details: Media){
 
@@ -178,19 +127,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
         }
 
-       /* binding!!.favorite.setOnClickListener {
-            viewModel.checkDbForData(id!!)
-            if (!checkDb()) {
-                viewModel.insertInDb(details)
-                binding!!.favorite.setImageDrawable(
-                    ContextCompat.getDrawable(requireContext(), R.drawable.heart_24)
-                )
-                Toast.makeText(requireContext(), "Inserted $titleText", Toast.LENGTH_LONG).show()
-            }else{
-                Toast.makeText(requireContext(), "Already in database", Toast.LENGTH_LONG).show()
-            }
-        }*/
-
 
         val img = binding!!.mediaImageSheet
         val ratings = binding!!.ratingBar
@@ -199,21 +135,6 @@ class DetailBottomSheet : BottomSheetDialogFragment() {
 
 
         Log.e(TAG, "showDetailsDialog: $titleText", )
-        /*var isShow = true
-        var scrollRange = -1
-        binding!!.appBarLayout.addOnOffsetChangedListener(AppBarLayout.OnOffsetChangedListener { barLayout, verticalOffset ->
-            if (scrollRange == -1){
-                scrollRange = barLayout?.totalScrollRange!!
-            }
-            if (scrollRange + verticalOffset == 0){
-                binding!!.collapsingToolbar.title = titleText
-
-                isShow = true
-            } else if (isShow){
-                binding!!.collapsingToolbar.title = " "
-                isShow = false
-            }
-        })*/
 
         binding!!.mediaTitleSheet.text = titleText
 
